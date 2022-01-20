@@ -1,0 +1,21 @@
+.header__bar {
+    background-color: var(--secondary-bg-color);
+}
+
+.title__link:link {
+    color: var(--main-title-color);
+    text-decoration: none;
+}
+
+.title__link:visited {
+    color: var(--main-title-color);
+}
+
+.title__link:hover {
+    color: var(--secondary-title-color);
+
+}
+
+.title__link:active {
+    color: var(--main-title-color);
+}
