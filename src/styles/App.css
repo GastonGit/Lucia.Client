@@ -1,17 +1,8 @@
 .app {
-    text-align: center;
+
 }
 
-.app__header {
-    background-color: #282c34;
-    color: white;
-
-    min-height: 100vh;
-
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-
-    font-size: calc(10px + 2vmin);
+.image__url{
+    display: block;
+    height: 100%;
 }
