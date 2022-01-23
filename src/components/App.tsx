@@ -9,14 +9,7 @@ export default function App(): JSX.Element {
     return (
         <ImageList sx={{ width: 1800 }} cols={7} gap={8} rowHeight={380}>
             {itemData.map((item, index) => (
-                <Link
-                    key={item.img + (index + 1)}
-                    component="button"
-                    variant="body2"
-                    onClick={() => {
-                        console.info("I'm a button." + (index + 1));
-                    }}
-                >
+                <Link key={item.img + (index + 1)} href="#">
                     <ImageListItem>
                         <img
                             src={`${item.img}`}
