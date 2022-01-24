@@ -43,28 +43,40 @@ export default function MangaOverview(): JSX.Element {
         return <span>Loading...</span>;
     } else {
         return (
-            <ImageList sx={{ width: 1800 }} cols={7} gap={8} rowHeight={380}>
-                {items.images.map(
-                    (
-                        item: {
-                            img: string;
-                            title: string;
-                            author: string;
-                            id: string;
-                        },
-                        index: number,
-                    ) => (
-                        <Link
-                            key={item + '' + (index + 1)}
-                            href={'/read/' + items.id + '?page=' + (index + 1)}
-                        >
-                            <ImageListItem>
-                                <img src={`http://localhost:6021/${item}`} />
-                            </ImageListItem>
-                        </Link>
-                    ),
-                )}
-            </ImageList>
+            <div>
+                <p>Title: {items.title}</p>
+                <ImageList
+                    sx={{ width: 1800 }}
+                    cols={7}
+                    gap={8}
+                    rowHeight={380}
+                >
+                    {items.images.map(
+                        (
+                            item: {
+                                img: string;
+                                title: string;
+                                author: string;
+                                id: string;
+                            },
+                            index: number,
+                        ) => (
+                            <Link
+                                key={item + '' + (index + 1)}
+                                href={
+                                    '/read/' + items.id + '?page=' + (index + 1)
+                                }
+                            >
+                                <ImageListItem>
+                                    <img
+                                        src={`http://localhost:6021/${item}`}
+                                    />
+                                </ImageListItem>
+                            </Link>
+                        ),
+                    )}
+                </ImageList>
+            </div>
         );
     }
 }
