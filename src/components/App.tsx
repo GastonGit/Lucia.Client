@@ -36,10 +36,18 @@ export default function App(): JSX.Element {
             <ImageList sx={{ width: 1800 }} cols={7} gap={8} rowHeight={380}>
                 {items.map(
                     (
-                        item: { img: string; title: string; author: string },
+                        item: {
+                            img: string;
+                            title: string;
+                            author: string;
+                            id: string;
+                        },
                         index: number,
                     ) => (
-                        <Link key={item.img + (index + 1)} href="#">
+                        <Link
+                            key={item.img + (index + 1)}
+                            href={'/manga/' + item.id}
+                        >
                             <ImageListItem>
                                 <img
                                     src={`${item.img}`}
