@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 import App from './components/App';
 import Header from './components/Header';
+import MangaOverview from './components/MangaOverview';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -12,6 +13,7 @@ ReactDOM.render(
             <Header />
             <Routes>
                 <Route path="/" element={<App />} />
+                <Route path="/manga/:id" element={<MangaOverview />} />
             </Routes>
         </React.StrictMode>
     </BrowserRouter>,
