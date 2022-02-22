@@ -1,21 +1,22 @@
 .header__bar {
-    background-color: var(--secondary-bg-color);
+    color: var(--main-text-color);
+    background-color: var(--quaternary--bg-color);
 }
 
 .title__link:link {
-    color: var(--main-title-color);
+    color: var(--main-text-color);
     text-decoration: none;
 }
 
 .title__link:visited {
-    color: var(--main-title-color);
+    color: var(--main-text-color);
 }
 
 .title__link:hover {
-    color: var(--secondary-title-color);
+    color: var(--secondary-text-color);
 
 }
 
 .title__link:active {
-    color: var(--main-title-color);
+    color: var(--main-text-color);
 }

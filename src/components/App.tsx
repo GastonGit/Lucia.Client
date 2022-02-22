@@ -3,7 +3,7 @@ import '../styles/App.css';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import { Link } from '@mui/material';
+import { Stack, Link } from '@mui/material';
 
 export default function App(): JSX.Element {
     const [error, setError] = useState(null);
@@ -33,30 +33,55 @@ export default function App(): JSX.Element {
         return <span>Loading...</span>;
     } else {
         return (
-            <ImageList sx={{ width: 1800 }} cols={7} gap={8} rowHeight={380}>
-                {items.map(
-                    (item: {
-                        thumbnail: string;
-                        title: string;
-                        author: string;
-                        id: string;
-                    }) => (
-                        <Link key={item.id} href={'/manga/' + item.id}>
-                            <ImageListItem>
-                                <img
-                                    src={`${process.env.REACT_APP_API_SERVER}/media/${item.id}/${item.thumbnail}`}
-                                    alt={'Thumbnail for ' + item.title}
-                                />
-                                <ImageListItemBar
-                                    title={item.title}
-                                    subtitle={<span>by: {item.author}</span>}
-                                    position="below"
-                                />
-                            </ImageListItem>
-                        </Link>
-                    ),
-                )}
-            </ImageList>
+            <Stack
+                direction="column"
+                alignItems="center"
+                spacing={2}
+                mt={2}
+                mb={2}
+            >
+                <ImageList
+                    sx={{
+                        width: 1700,
+                        borderStyle: 'solid',
+                        borderWidth: '5px',
+                        borderColor: 'var(--quinary--bg-color)',
+                        backgroundColor: 'var(--quinary--bg-color)',
+                    }}
+                    cols={7}
+                    rowHeight={380}
+                    gap={6}
+                >
+                    {items.map(
+                        (item: {
+                            thumbnail: string;
+                            title: string;
+                            author: string;
+                            id: string;
+                        }) => (
+                            <Link key={item.id} href={'/manga/' + item.id}>
+                                <ImageListItem>
+                                    <img
+                                        src={`${process.env.REACT_APP_API_SERVER}/media/${item.id}/${item.thumbnail}`}
+                                        alt={'Thumbnail for ' + item.title}
+                                    />
+                                    <ImageListItemBar
+                                        title={item.title}
+                                        subtitle={
+                                            <span>by: {item.author}</span>
+                                        }
+                                        sx={{
+                                            color: 'var(--quinary--bg-color)',
+                                            backgroundColor:
+                                                'var(--quaternary--bg-color)',
+                                        }}
+                                    />
+                                </ImageListItem>
+                            </Link>
+                        ),
+                    )}
+                </ImageList>
+            </Stack>
         );
     }
 }

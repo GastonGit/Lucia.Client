@@ -4,11 +4,15 @@
 }
 
 :root {
-  --main-bg-color: #383F51;
-  --main-text-color: #AB9F9D;
-  --main-title-color: #DDDBF1;
-  --secondary-bg-color: #3C4F76;
-  --secondary-title-color: #D1BEB0;
+  --main-bg-color: #272727;
+  --secondary-bg-color: #202020;
+  --tertiary-bg-color: #353535;
+  --quaternary--bg-color: #101010;
+  --quinary--bg-color: #731729;
+
+  --main-text-color: #b3243f;
+  --secondary-text-color: #F2F4F3;
+  --tertiary-text-color: #b3243f;
 }
 
 body {
