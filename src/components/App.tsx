@@ -35,24 +35,17 @@ export default function App(): JSX.Element {
         return (
             <ImageList sx={{ width: 1800 }} cols={7} gap={8} rowHeight={380}>
                 {items.map(
-                    (
-                        item: {
-                            img: string;
-                            title: string;
-                            author: string;
-                            id: string;
-                        },
-                        index: number,
-                    ) => (
-                        <Link
-                            key={item.img + (index + 1)}
-                            href={'/manga/' + item.id}
-                        >
+                    (item: {
+                        thumbnail: string;
+                        title: string;
+                        author: string;
+                        id: string;
+                    }) => (
+                        <Link key={item.id} href={'/manga/' + item.id}>
                             <ImageListItem>
                                 <img
-                                    src={`${item.img}`}
-                                    srcSet={`${item.img}`}
-                                    alt={item.title}
+                                    src={`${process.env.REACT_APP_API_SERVER}/media/${item.id}/${item.thumbnail}`}
+                                    alt={'Thumbnail for ' + item.title}
                                 />
                                 <ImageListItemBar
                                     title={item.title}
