@@ -3,16 +3,30 @@ import '../styles/App.css';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import { Stack, Link, Fade } from '@mui/material';
+import { Stack, Link, Fade, Pagination } from '@mui/material';
 import loadingImage from '../assets/loading.png';
+import { useSearchParams } from 'react-router-dom';
 
 export default function App(): JSX.Element {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
+    const [gallery, setGallery] = useState([]);
+    const [maxPageCount, setMaxPageCount] = useState(0);
+    const [page, setPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        fetch(process.env.REACT_APP_API_SERVER || '')
+        const pageNumber = parseInt(searchParams.get('page') as string);
+        if (!Number.isNaN(pageNumber) && pageNumber !== page) {
+            setPage(pageNumber);
+            updateGallery(pageNumber);
+        } else {
+            updateGallery(1);
+        }
+    }, []);
+
+    function updateGallery(newPage: number) {
+        fetch('' + process.env.REACT_APP_API_SERVER + '/' + newPage)
             .then((res) => res.json())
             .then(
                 (result) => {
@@ -20,7 +34,8 @@ export default function App(): JSX.Element {
                         const img = new Image();
                         img.src = `${process.env.REACT_APP_API_SERVER}/media/${result[i].directory}/${result[i].thumbnail}`;
                     }
-                    setItems(result);
+                    setGallery(result.gallery);
+                    setMaxPageCount(result.maxPageCount);
                     setIsLoaded(true);
                 },
                 (error) => {
@@ -28,7 +43,30 @@ export default function App(): JSX.Element {
                     setError(error);
                 },
             );
-    }, []);
+    }
+
+    let pageNumber = parseInt(searchParams.get('page') as string);
+    if (Number.isNaN(pageNumber)) {
+        pageNumber = 1;
+    }
+    if (pageNumber !== page) {
+        setPage(pageNumber);
+        updateGallery(pageNumber);
+    }
+
+    const handlePageChange = (
+        _event: React.ChangeEvent<unknown>,
+        value: number,
+    ) => {
+        if (value > 0 && value < 3) {
+            setSearchParams({ ['page']: value.toString() });
+
+            if (value !== page) {
+                setPage(value);
+            }
+            updateGallery(value);
+        }
+    };
 
     if (error) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -92,7 +130,7 @@ export default function App(): JSX.Element {
                     rowHeight={380}
                     gap={6}
                 >
-                    {items.map(
+                    {gallery.map(
                         (item: {
                             thumbnail: string;
                             title: string;
@@ -143,6 +181,20 @@ export default function App(): JSX.Element {
                         ),
                     )}
                 </ImageList>
+                <Stack
+                    spacing={2}
+                    sx={{
+                        backgroundColor: 'var(--quinary--bg-color)',
+                    }}
+                >
+                    <Pagination
+                        count={maxPageCount}
+                        shape="rounded"
+                        size="large"
+                        page={page}
+                        onChange={handlePageChange}
+                    />
+                </Stack>
             </Stack>
         );
     }
