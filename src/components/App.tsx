@@ -56,13 +56,14 @@ export default function App(): JSX.Element {
                         (item: {
                             thumbnail: string;
                             title: string;
+                            directory: string;
                             author: string;
                             id: string;
                         }) => (
                             <Link key={item.id} href={'/manga/' + item.id}>
                                 <ImageListItem>
                                     <img
-                                        src={`${process.env.REACT_APP_API_SERVER}/media/${item.id}/${item.thumbnail}`}
+                                        src={`${process.env.REACT_APP_API_SERVER}/media/${item.directory}/${item.thumbnail}`}
                                         alt={'Thumbnail for ' + item.title}
                                     />
                                     <ImageListItemBar
