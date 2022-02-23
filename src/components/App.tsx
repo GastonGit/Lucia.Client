@@ -61,10 +61,11 @@ export default function App(): JSX.Element {
                             id: string;
                         }) => (
                             <Link key={item.id} href={'/' + item.id}>
-                                <ImageListItem>
+                                <ImageListItem sx={{ objectFit: 'contain' }}>
                                     <img
                                         src={`${process.env.REACT_APP_API_SERVER}/media/${item.directory}/${item.thumbnail}`}
                                         alt={'Thumbnail for ' + item.title}
+                                        className="objectFit__contain"
                                     />
                                     <ImageListItemBar
                                         title={item.title}

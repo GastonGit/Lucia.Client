@@ -6,3 +6,7 @@
     display: block;
     height: 100%;
 }
+
+.objectFit__contain{
+    object-fit: fill !important;
+}
