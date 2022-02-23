@@ -13,7 +13,7 @@ ReactDOM.render(
             <Header />
             <Routes>
                 <Route path="/" element={<App />} />
-                <Route path="/manga/:id" element={<MangaOverview />} />
+                <Route path="/:id" element={<MangaOverview />} />
             </Routes>
         </React.StrictMode>
     </BrowserRouter>,

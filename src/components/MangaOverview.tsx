@@ -28,7 +28,7 @@ export default function MangaOverview(): JSX.Element {
     const location = useLocation();
 
     useEffect(() => {
-        fetch(api + location.pathname)
+        fetch(api + '/manga' + location.pathname)
             .then((res) => res.json())
             .then(
                 (result) => {

@@ -60,7 +60,7 @@ export default function App(): JSX.Element {
                             author: string;
                             id: string;
                         }) => (
-                            <Link key={item.id} href={'/manga/' + item.id}>
+                            <Link key={item.id} href={'/' + item.id}>
                                 <ImageListItem>
                                     <img
                                         src={`${process.env.REACT_APP_API_SERVER}/media/${item.directory}/${item.thumbnail}`}
