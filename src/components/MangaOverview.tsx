@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../styles/App.css';
 import { useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
-import { Link, Stack, Typography } from '@mui/material';
+import { Fade, Link, Stack, Typography } from '@mui/material';
 import ImageListItem from '@mui/material/ImageListItem';
+import loadingImage from '../assets/loading.png';
 
 export default function MangaOverview(): JSX.Element {
     const [error, setError] = useState(null);
@@ -143,8 +144,8 @@ export default function MangaOverview(): JSX.Element {
                     </ImageListItem>
                 </Link>
             </ImageList>,
-        ),
-            centerView();
+        );
+        centerView();
     }
 
     if (error) {
@@ -152,8 +153,17 @@ export default function MangaOverview(): JSX.Element {
         // @ts-ignore
         return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
-        return <span>Loading...</span>;
-    } else {
+        const images = [];
+        for (let i = 0; i < 21; i++) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            images.push(
+                <ImageListItem sx={{ objectFit: 'contain' }} key={i}>
+                    <img src={loadingImage} className="objectFit__contain" />
+                </ImageListItem>,
+            );
+        }
+
         return (
             <Stack
                 direction="column"
@@ -163,8 +173,40 @@ export default function MangaOverview(): JSX.Element {
                 mb={2}
             >
                 <Typography variant="h2" color="var(--main-text-color)">
-                    {manga.information.title}
+                    Loading...
                 </Typography>
+                <div>{currentImage}</div>
+                <ImageList
+                    sx={{
+                        width: 1700,
+                        borderStyle: 'solid',
+                        borderWidth: '5px',
+                        borderColor: 'var(--quinary--bg-color)',
+                        backgroundColor: 'var(--quinary--bg-color)',
+                        overflow: 'hidden',
+                    }}
+                    cols={7}
+                    rowHeight={380}
+                    gap={6}
+                >
+                    {images}
+                </ImageList>
+            </Stack>
+        );
+    } else {
+        return (
+            <Stack
+                direction="column"
+                alignItems="center"
+                spacing={2}
+                mt={2}
+                mb={2}
+            >
+                <Fade in={true}>
+                    <Typography variant="h2" color="var(--main-text-color)">
+                        {manga.information.title}
+                    </Typography>
+                </Fade>
                 <div ref={myRef}>{currentImage}</div>
                 <ImageList
                     sx={{
@@ -185,13 +227,24 @@ export default function MangaOverview(): JSX.Element {
                             onClick={() => {
                                 onImageClick(index);
                             }}
+                            sx={{
+                                backgroundColor: 'var(--quaternary--bg-color)',
+                            }}
                         >
-                            <ImageListItem>
-                                <img
-                                    src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${image.name}`}
-                                    alt={'Image for ' + manga.information.title}
-                                />
-                            </ImageListItem>
+                            <Fade in={true}>
+                                <div>
+                                    <ImageListItem>
+                                        <img
+                                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${image.name}`}
+                                            alt={
+                                                'Image for ' +
+                                                manga.information.title
+                                            }
+                                            className="objectFit__contain"
+                                        />
+                                    </ImageListItem>
+                                </div>
+                            </Fade>
                         </Link>
                     ))}
                 </ImageList>
