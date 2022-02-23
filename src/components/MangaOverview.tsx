@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/App.css';
 import { useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
@@ -21,8 +21,10 @@ export default function MangaOverview(): JSX.Element {
             title: '',
             universe: '',
         },
-        images: [],
+        images: [{ name: '' }],
     });
+    const [currentImage, setCurrentImage] = useState(<div></div>);
+    const myRef = useRef(null);
 
     const api = process.env.REACT_APP_API_SERVER || '';
     const location = useLocation();
@@ -42,6 +44,109 @@ export default function MangaOverview(): JSX.Element {
             );
     }, []);
 
+    useEffect(() => {
+        centerView();
+    }, [currentImage]);
+
+    function centerView() {
+        if (myRef !== null && myRef.current !== null) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            myRef.current.scrollIntoView();
+        }
+    }
+
+    function onImageClick(index: number) {
+        const currentImagePath = manga.images[index].name;
+        const blurFilter = 'blur(4px)';
+        const opacity = '0.25';
+
+        let backLink;
+        let backIndex = index;
+        let backOpacity = opacity;
+
+        let forwardLink;
+        let forwardIndex = index;
+        let forwardOpacity = opacity;
+
+        if (index >= 1) {
+            backLink = manga.images[index - 1].name;
+            backIndex = index - 1;
+        } else {
+            backLink = manga.images[index].name;
+            backOpacity = '0';
+        }
+
+        if (index + 2 <= manga.images.length) {
+            forwardLink = manga.images[index + 1].name;
+            forwardIndex = index + 1;
+        } else {
+            forwardLink = manga.images[index].name;
+            forwardOpacity = '0';
+        }
+
+        setCurrentImage(
+            <ImageList
+                sx={{
+                    width: 1890,
+                    borderStyle: 'solid',
+                    borderWidth: '5px',
+                    borderColor: 'var(--quaternary--bg-color)',
+                    backgroundColor: 'var(--quaternary--bg-color)',
+                }}
+                cols={3}
+                rowHeight={926}
+                gap={6}
+            >
+                <Link
+                    key="backButton"
+                    component="button"
+                    onClick={() => {
+                        onImageClick(backIndex);
+                    }}
+                >
+                    <ImageListItem
+                        sx={{ filter: blurFilter, opacity: backOpacity }}
+                    >
+                        <img
+                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${backLink}`}
+                            alt={'viewed-page'}
+                        />
+                    </ImageListItem>
+                </Link>
+                <Link
+                    key="centerButton"
+                    component="button"
+                    onClick={centerView}
+                >
+                    <ImageListItem>
+                        <img
+                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${currentImagePath}`}
+                            alt={'viewed-page'}
+                        />
+                    </ImageListItem>
+                </Link>
+                <Link
+                    key="nextButton"
+                    component="button"
+                    onClick={() => {
+                        onImageClick(forwardIndex);
+                    }}
+                >
+                    <ImageListItem
+                        sx={{ filter: blurFilter, opacity: forwardOpacity }}
+                    >
+                        <img
+                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${forwardLink}`}
+                            alt={'viewed-page'}
+                        />
+                    </ImageListItem>
+                </Link>
+            </ImageList>,
+        ),
+            centerView();
+    }
+
     if (error) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -60,6 +165,7 @@ export default function MangaOverview(): JSX.Element {
                 <Typography variant="h2" color="var(--main-text-color)">
                     {manga.information.title}
                 </Typography>
+                <div ref={myRef}>{currentImage}</div>
                 <ImageList
                     sx={{
                         width: 1700,
@@ -72,10 +178,13 @@ export default function MangaOverview(): JSX.Element {
                     rowHeight={380}
                     gap={6}
                 >
-                    {manga.images.map((image: { name: string }) => (
+                    {manga.images.map((image: { name: string }, index) => (
                         <Link
-                            key={image.name}
-                            href={'/manga/' + manga.information.id}
+                            key={index}
+                            component="button"
+                            onClick={() => {
+                                onImageClick(index);
+                            }}
                         >
                             <ImageListItem>
                                 <img
