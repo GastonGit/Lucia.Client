@@ -6,7 +6,7 @@ import { Fade, Link, Stack, Typography } from '@mui/material';
 import ImageListItem from '@mui/material/ImageListItem';
 import loadingImage from '../assets/loading.png';
 
-export default function MangaOverview(): JSX.Element {
+export default function Read(): JSX.Element {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [manga, setManga] = useState({

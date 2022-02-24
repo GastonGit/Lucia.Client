@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 import Gallery from './components/Gallery';
 import Header from './components/Header';
-import MangaOverview from './components/MangaOverview';
+import Read from './components/Read';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -13,7 +13,7 @@ ReactDOM.render(
             <Header />
             <Routes>
                 <Route path="/" element={<Gallery />} />
-                <Route path="/:id" element={<MangaOverview />} />
+                <Route path="/:id" element={<Read />} />
             </Routes>
         </React.StrictMode>
     </BrowserRouter>,
