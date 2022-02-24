@@ -16,17 +16,7 @@ export default function App(): JSX.Element {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        const pageNumber = parseInt(searchParams.get('page') as string);
-        if (!Number.isNaN(pageNumber) && pageNumber !== page) {
-            setPage(pageNumber);
-            updateGallery(pageNumber);
-        } else {
-            updateGallery(1);
-        }
-    }, []);
-
-    function updateGallery(newPage: number) {
-        fetch('' + process.env.REACT_APP_API_SERVER + '/' + newPage)
+        fetch('' + process.env.REACT_APP_API_SERVER + '/' + page)
             .then((res) => res.json())
             .then(
                 (result) => {
@@ -43,7 +33,7 @@ export default function App(): JSX.Element {
                     setError(error);
                 },
             );
-    }
+    }, [page]);
 
     let pageNumber = parseInt(searchParams.get('page') as string);
     if (Number.isNaN(pageNumber)) {
@@ -51,7 +41,6 @@ export default function App(): JSX.Element {
     }
     if (pageNumber !== page) {
         setPage(pageNumber);
-        updateGallery(pageNumber);
     }
 
     const handlePageChange = (
@@ -64,7 +53,6 @@ export default function App(): JSX.Element {
             if (value !== page) {
                 setPage(value);
             }
-            updateGallery(value);
         }
     };
 
