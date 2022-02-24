@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/App.css';
+import '../styles/Gallery.css';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
@@ -7,7 +7,7 @@ import { Stack, Link, Fade, Pagination } from '@mui/material';
 import loadingImage from '../assets/loading.png';
 import { useSearchParams } from 'react-router-dom';
 
-export default function App(): JSX.Element {
+export default function Gallery(): JSX.Element {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gallery, setGallery] = useState([]);

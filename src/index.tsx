@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
-import App from './components/App';
+import Gallery from './components/Gallery';
 import Header from './components/Header';
 import MangaOverview from './components/MangaOverview';
 
@@ -12,7 +12,7 @@ ReactDOM.render(
         <React.StrictMode>
             <Header />
             <Routes>
-                <Route path="/" element={<App />} />
+                <Route path="/" element={<Gallery />} />
                 <Route path="/:id" element={<MangaOverview />} />
             </Routes>
         </React.StrictMode>

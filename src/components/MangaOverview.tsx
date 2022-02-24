@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/App.css';
+import '../styles/Gallery.css';
 import { useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import { Fade, Link, Stack, Typography } from '@mui/material';
