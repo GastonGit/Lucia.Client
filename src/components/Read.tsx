@@ -112,6 +112,7 @@ export default function Read(): JSX.Element {
                         <img
                             src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${backLink}`}
                             alt={'viewed-page'}
+                            className="objectFit__contain"
                         />
                     </ImageListItem>
                 </Link>
@@ -124,6 +125,7 @@ export default function Read(): JSX.Element {
                         <img
                             src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${currentImagePath}`}
                             alt={'viewed-page'}
+                            className="objectFit__contain"
                         />
                     </ImageListItem>
                 </Link>
@@ -140,6 +142,7 @@ export default function Read(): JSX.Element {
                         <img
                             src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${forwardLink}`}
                             alt={'viewed-page'}
+                            className="objectFit__contain"
                         />
                     </ImageListItem>
                 </Link>
