@@ -22,7 +22,7 @@ export default function Gallery(): JSX.Element {
                 (result) => {
                     for (let i = 0; i < result.length; i++) {
                         const img = new Image();
-                        img.src = `${process.env.REACT_APP_API_SERVER}/media/${result[i].directory}/${result[i].thumbnail}`;
+                        img.src = result[i].thumbnail;
                     }
                     setGallery(result.gallery);
                     setMaxPageCount(result.maxPageCount);
@@ -122,7 +122,6 @@ export default function Gallery(): JSX.Element {
                         (item: {
                             thumbnail: string;
                             title: string;
-                            directory: string;
                             author: string;
                             id: string;
                         }) => (
@@ -155,7 +154,7 @@ export default function Gallery(): JSX.Element {
                                                 }}
                                             />
                                             <img
-                                                src={`${process.env.REACT_APP_API_SERVER}/media/${item.directory}/${item.thumbnail}`}
+                                                src={item.thumbnail}
                                                 alt={
                                                     'Thumbnail for ' +
                                                     item.title
