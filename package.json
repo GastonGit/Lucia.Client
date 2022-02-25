@@ -1,6 +1,6 @@
 {
   "name": "lucia.client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "start": "react-scripts start",
     "start:prod": "serve -s build -l 5001",
