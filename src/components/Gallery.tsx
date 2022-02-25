@@ -16,7 +16,7 @@ export default function Gallery(): JSX.Element {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        fetch('' + process.env.REACT_APP_API_SERVER + '/' + page)
+        fetch('' + process.env.REACT_APP_API_SERVER + '/gallery?page=' + page)
             .then((res) => res.json())
             .then(
                 (result) => {
