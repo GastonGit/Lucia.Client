@@ -10,28 +10,19 @@ export default function Read(): JSX.Element {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [manga, setManga] = useState({
-        information: {
-            author: '',
-            bucket: '',
-            chapter: 1,
-            created_at: '',
-            directory: '',
-            id: 0,
-            series: '',
-            thumbnail: '',
-            title: '',
-            universe: '',
-        },
-        images: [{ name: '' }],
+        author: '',
+        title: '',
+        images: [],
     });
     const [currentImage, setCurrentImage] = useState(<div></div>);
     const myRef = useRef(null);
 
     const api = process.env.REACT_APP_API_SERVER || '';
-    const location = useLocation();
+    const pathname = useLocation().pathname;
+    const id = pathname.substring(pathname.indexOf('/') + 1);
 
     useEffect(() => {
-        fetch(api + '/manga' + location.pathname)
+        fetch(api + '/manga?id=' + id)
             .then((res) => res.json())
             .then(
                 (result) => {
@@ -58,7 +49,7 @@ export default function Read(): JSX.Element {
     }
 
     function onImageClick(index: number) {
-        const currentImagePath = manga.images[index].name;
+        const currentImagePath = manga.images[index];
         const blurFilter = 'blur(4px)';
         const opacity = '0.25';
 
@@ -71,18 +62,18 @@ export default function Read(): JSX.Element {
         let forwardOpacity = opacity;
 
         if (index >= 1) {
-            backLink = manga.images[index - 1].name;
+            backLink = manga.images[index - 1];
             backIndex = index - 1;
         } else {
-            backLink = manga.images[index].name;
+            backLink = manga.images[index];
             backOpacity = '0';
         }
 
         if (index + 2 <= manga.images.length) {
-            forwardLink = manga.images[index + 1].name;
+            forwardLink = manga.images[index + 1];
             forwardIndex = index + 1;
         } else {
-            forwardLink = manga.images[index].name;
+            forwardLink = manga.images[index];
             forwardOpacity = '0';
         }
 
@@ -110,7 +101,7 @@ export default function Read(): JSX.Element {
                         sx={{ filter: blurFilter, opacity: backOpacity }}
                     >
                         <img
-                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${backLink}`}
+                            src={backLink}
                             alt={'viewed-page'}
                             className="objectFit__contain"
                         />
@@ -123,7 +114,7 @@ export default function Read(): JSX.Element {
                 >
                     <ImageListItem>
                         <img
-                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${currentImagePath}`}
+                            src={currentImagePath}
                             alt={'viewed-page'}
                             className="objectFit__contain"
                         />
@@ -140,7 +131,7 @@ export default function Read(): JSX.Element {
                         sx={{ filter: blurFilter, opacity: forwardOpacity }}
                     >
                         <img
-                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${forwardLink}`}
+                            src={forwardLink}
                             alt={'viewed-page'}
                             className="objectFit__contain"
                         />
@@ -207,7 +198,7 @@ export default function Read(): JSX.Element {
             >
                 <Fade in={true}>
                     <Typography variant="h2" color="var(--main-text-color)">
-                        {manga.information.title}
+                        {manga.title}
                     </Typography>
                 </Fade>
                 <div ref={myRef}>{currentImage}</div>
@@ -223,7 +214,7 @@ export default function Read(): JSX.Element {
                     rowHeight={380}
                     gap={6}
                 >
-                    {manga.images.map((image: { name: string }, index) => (
+                    {manga.images.map((image: string, index) => (
                         <Link
                             key={index}
                             component="button"
@@ -238,11 +229,8 @@ export default function Read(): JSX.Element {
                                 <div>
                                     <ImageListItem>
                                         <img
-                                            src={`${process.env.REACT_APP_API_SERVER}/media/${manga.information.directory}/${manga.information.bucket}/${image.name}`}
-                                            alt={
-                                                'Image for ' +
-                                                manga.information.title
-                                            }
+                                            src={image}
+                                            alt={'Image for ' + manga.title}
                                             className="objectFit__contain"
                                         />
                                     </ImageListItem>
