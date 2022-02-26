@@ -3,6 +3,7 @@ import '../styles/Gallery.css';
 import { useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import { Fade, Link, Stack, Typography } from '@mui/material';
+import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 import loadingImage from '../assets/loading.png';
 
@@ -215,28 +216,31 @@ export default function Read(): JSX.Element {
                     gap={6}
                 >
                     {manga.images.map((image: string, index) => (
-                        <Link
-                            key={index}
-                            component="button"
-                            onClick={() => {
-                                onImageClick(index);
-                            }}
-                            sx={{
-                                backgroundColor: 'var(--quaternary--bg-color)',
-                            }}
-                        >
-                            <Fade in={true}>
-                                <div>
-                                    <ImageListItem>
-                                        <img
-                                            src={image}
-                                            alt={'Image for ' + manga.title}
-                                            className="objectFit__contain"
-                                        />
-                                    </ImageListItem>
-                                </div>
-                            </Fade>
-                        </Link>
+                        <StyledTooltip title={'Page ' + (index + 1)}>
+                            <Link
+                                key={index}
+                                component="button"
+                                onClick={() => {
+                                    onImageClick(index);
+                                }}
+                                sx={{
+                                    backgroundColor:
+                                        'var(--quaternary--bg-color)',
+                                }}
+                            >
+                                <Fade in={true}>
+                                    <div>
+                                        <ImageListItem>
+                                            <img
+                                                src={image}
+                                                alt={'Image for ' + manga.title}
+                                                className="objectFit__contain"
+                                            />
+                                        </ImageListItem>
+                                    </div>
+                                </Fade>
+                            </Link>
+                        </StyledTooltip>
                     ))}
                 </ImageList>
             </Stack>
