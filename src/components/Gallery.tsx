@@ -4,10 +4,9 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import { Stack, Link, Fade, Pagination } from '@mui/material';
-import loadingImage from '../assets/loading.png';
 import { useSearchParams } from 'react-router-dom';
 
-export default function Gallery(): JSX.Element {
+export default function Gallery(): JSX.Element | null {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gallery, setGallery] = useState([]);
@@ -29,8 +28,8 @@ export default function Gallery(): JSX.Element {
                     setIsLoaded(true);
                 },
                 (error) => {
-                    setIsLoaded(true);
                     setError(error);
+                    setIsLoaded(true);
                 },
             );
     }, [page]);
@@ -60,80 +59,43 @@ export default function Gallery(): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-        const images = [];
-        for (let i = 0; i < 21; i++) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            images.push(
-                <ImageListItem sx={{ objectFit: 'contain' }} key={i}>
-                    <img src={loadingImage} className="objectFit__contain" />
-                </ImageListItem>,
-            );
-        }
-
+    } else if (isLoaded) {
         return (
-            <Stack
-                direction="column"
-                alignItems="center"
-                spacing={2}
-                mt={2}
-                mb={2}
-            >
-                <ImageList
-                    sx={{
-                        width: 1700,
-                        borderStyle: 'solid',
-                        borderWidth: '5px',
-                        borderColor: 'var(--quinary--bg-color)',
-                        backgroundColor: 'var(--quinary--bg-color)',
-                        overflow: 'hidden',
-                    }}
-                    cols={7}
-                    rowHeight={380}
-                    gap={6}
+            <Fade in={true} timeout={250}>
+                <Stack
+                    direction="column"
+                    alignItems="center"
+                    spacing={2}
+                    mt={2}
+                    mb={2}
                 >
-                    {images}
-                </ImageList>
-            </Stack>
-        );
-    } else {
-        return (
-            <Stack
-                direction="column"
-                alignItems="center"
-                spacing={2}
-                mt={2}
-                mb={2}
-            >
-                <ImageList
-                    sx={{
-                        width: 1700,
-                        borderStyle: 'solid',
-                        borderWidth: '5px',
-                        borderColor: 'var(--quinary--bg-color)',
-                        backgroundColor: 'var(--quinary--bg-color)',
-                    }}
-                    cols={7}
-                    rowHeight={380}
-                    gap={6}
-                >
-                    {gallery.map(
-                        (item: {
-                            thumbnail: string;
-                            title: string;
-                            author: string;
-                            id: string;
-                        }) => (
-                            <Link
-                                key={item.id}
-                                href={'/' + item.id}
-                                sx={{
-                                    backgroundColor:
-                                        'var(--quaternary--bg-color)',
-                                }}
-                            >
-                                <Fade in={true}>
+                    <ImageList
+                        sx={{
+                            width: 1700,
+                            borderStyle: 'solid',
+                            borderWidth: '5px',
+                            borderColor: 'var(--quinary--bg-color)',
+                            backgroundColor: 'var(--quinary--bg-color)',
+                        }}
+                        cols={7}
+                        rowHeight={380}
+                        gap={6}
+                    >
+                        {gallery.map(
+                            (item: {
+                                thumbnail: string;
+                                title: string;
+                                author: string;
+                                id: string;
+                            }) => (
+                                <Link
+                                    key={item.id}
+                                    href={'/' + item.id}
+                                    sx={{
+                                        backgroundColor:
+                                            'var(--quaternary--bg-color)',
+                                    }}
+                                >
                                     <div>
                                         <ImageListItem
                                             sx={{
@@ -163,26 +125,28 @@ export default function Gallery(): JSX.Element {
                                             />
                                         </ImageListItem>
                                     </div>
-                                </Fade>
-                            </Link>
-                        ),
-                    )}
-                </ImageList>
-                <Stack
-                    spacing={2}
-                    sx={{
-                        backgroundColor: 'var(--quinary--bg-color)',
-                    }}
-                >
-                    <Pagination
-                        count={maxPageCount}
-                        shape="rounded"
-                        size="large"
-                        page={page}
-                        onChange={handlePageChange}
-                    />
+                                </Link>
+                            ),
+                        )}
+                    </ImageList>
+                    <Stack
+                        spacing={2}
+                        sx={{
+                            backgroundColor: 'var(--quinary--bg-color)',
+                        }}
+                    >
+                        <Pagination
+                            count={maxPageCount}
+                            shape="rounded"
+                            size="large"
+                            page={page}
+                            onChange={handlePageChange}
+                        />
+                    </Stack>
                 </Stack>
-            </Stack>
+            </Fade>
         );
+    } else {
+        return null;
     }
 }

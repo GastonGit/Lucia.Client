@@ -5,9 +5,8 @@ import ImageList from '@mui/material/ImageList';
 import { Fade, Link, Stack, Typography } from '@mui/material';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
-import loadingImage from '../assets/loading.png';
 
-export default function Read(): JSX.Element {
+export default function Read(): JSX.Element | null {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [manga, setManga] = useState({
@@ -28,12 +27,12 @@ export default function Read(): JSX.Element {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    setIsLoaded(true);
                     setManga(result);
+                    setIsLoaded(true);
                 },
                 (error) => {
-                    setIsLoaded(true);
                     setError(error);
+                    setIsLoaded(true);
                 },
             );
     }, []);
@@ -148,103 +147,61 @@ export default function Read(): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-        const images = [];
-        for (let i = 0; i < 21; i++) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            images.push(
-                <ImageListItem sx={{ objectFit: 'contain' }} key={i}>
-                    <img src={loadingImage} className="objectFit__contain" />
-                </ImageListItem>,
-            );
-        }
-
+    } else if (isLoaded) {
         return (
-            <Stack
-                direction="column"
-                alignItems="center"
-                spacing={2}
-                mt={2}
-                mb={2}
-            >
-                <Typography variant="h2" color="var(--main-text-color)">
-                    Loading...
-                </Typography>
-                <div>{currentImage}</div>
-                <ImageList
-                    sx={{
-                        width: 1700,
-                        borderStyle: 'solid',
-                        borderWidth: '5px',
-                        borderColor: 'var(--quinary--bg-color)',
-                        backgroundColor: 'var(--quinary--bg-color)',
-                        overflow: 'hidden',
-                    }}
-                    cols={7}
-                    rowHeight={380}
-                    gap={6}
+            <Fade in={true} timeout={500}>
+                <Stack
+                    direction="column"
+                    alignItems="center"
+                    spacing={2}
+                    mt={2}
+                    mb={2}
                 >
-                    {images}
-                </ImageList>
-            </Stack>
-        );
-    } else {
-        return (
-            <Stack
-                direction="column"
-                alignItems="center"
-                spacing={2}
-                mt={2}
-                mb={2}
-            >
-                <Fade in={true}>
                     <Typography variant="h2" color="var(--main-text-color)">
                         {manga.title}
                     </Typography>
-                </Fade>
-                <div ref={myRef}>{currentImage}</div>
-                <ImageList
-                    sx={{
-                        width: 1700,
-                        borderStyle: 'solid',
-                        borderWidth: '5px',
-                        borderColor: 'var(--quinary--bg-color)',
-                        backgroundColor: 'var(--quinary--bg-color)',
-                    }}
-                    cols={7}
-                    rowHeight={380}
-                    gap={6}
-                >
-                    {manga.thumbnails.map((image: string, index) => (
-                        <StyledTooltip title={'Page ' + (index + 1)}>
-                            <Link
-                                key={index}
-                                component="button"
-                                onClick={() => {
-                                    onImageClick(index);
-                                }}
-                                sx={{
-                                    backgroundColor:
-                                        'var(--quaternary--bg-color)',
-                                }}
-                            >
-                                <Fade in={true}>
-                                    <div>
-                                        <ImageListItem>
-                                            <img
-                                                src={image}
-                                                alt={'Image for ' + manga.title}
-                                                className="objectFit__contain"
-                                            />
-                                        </ImageListItem>
-                                    </div>
-                                </Fade>
-                            </Link>
-                        </StyledTooltip>
-                    ))}
-                </ImageList>
-            </Stack>
+
+                    <div ref={myRef}>{currentImage}</div>
+                    <ImageList
+                        sx={{
+                            width: 1700,
+                            borderStyle: 'solid',
+                            borderWidth: '5px',
+                            borderColor: 'var(--quinary--bg-color)',
+                            backgroundColor: 'var(--quinary--bg-color)',
+                        }}
+                        cols={7}
+                        rowHeight={380}
+                        gap={6}
+                    >
+                        {manga.thumbnails.map((image: string, index) => (
+                            <StyledTooltip title={'Page ' + (index + 1)}>
+                                <Link
+                                    key={index}
+                                    component="button"
+                                    onClick={() => {
+                                        onImageClick(index);
+                                    }}
+                                    sx={{
+                                        backgroundColor:
+                                            'var(--quaternary--bg-color)',
+                                    }}
+                                >
+                                    <ImageListItem>
+                                        <img
+                                            src={image}
+                                            alt={'Image for ' + manga.title}
+                                            className="objectFit__contain"
+                                        />
+                                    </ImageListItem>
+                                </Link>
+                            </StyledTooltip>
+                        ))}
+                    </ImageList>
+                </Stack>
+            </Fade>
         );
+    } else {
+        return null;
     }
 }
