@@ -14,6 +14,7 @@ export default function Read(): JSX.Element {
         author: '',
         title: '',
         images: [],
+        thumbnails: [],
     });
     const [currentImage, setCurrentImage] = useState(<div></div>);
     const myRef = useRef(null);
@@ -215,7 +216,7 @@ export default function Read(): JSX.Element {
                     rowHeight={380}
                     gap={6}
                 >
-                    {manga.images.map((image: string, index) => (
+                    {manga.thumbnails.map((image: string, index) => (
                         <StyledTooltip title={'Page ' + (index + 1)}>
                             <Link
                                 key={index}
