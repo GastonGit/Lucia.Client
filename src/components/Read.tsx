@@ -175,9 +175,11 @@ export default function Read(): JSX.Element | null {
                         gap={6}
                     >
                         {manga.thumbnails.map((image: string, index) => (
-                            <StyledTooltip title={'Page ' + (index + 1)}>
+                            <StyledTooltip
+                                title={'Page ' + (index + 1)}
+                                key={index}
+                            >
                                 <Link
-                                    key={index}
                                     component="button"
                                     onClick={() => {
                                         onImageClick(index);
