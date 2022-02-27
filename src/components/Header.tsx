@@ -13,7 +13,7 @@ export default function Header(): JSX.Element {
                 >
                     <Link
                         href="/"
-                        variant="h6"
+                        variant="h4"
                         className="title__link"
                         sx={{ mr: 2 }}
                     >
