@@ -40,17 +40,17 @@ code {
     Scrollbar
 */
 ::-webkit-scrollbar {
-  background: #FFC914;
+  background: var(--quinary--bg-color);
 }
 
 ::-webkit-scrollbar-button{
-  background: #2E282A;
+  background: var(--quaternary--bg-color);
 }
 
 ::-webkit-scrollbar-thumb{
-  background: #2E282A;
+  background: var(--quaternary--bg-color);
 }
 
 ::-webkit-scrollbar-corner{
-  background: #2E282A;
+  background: var(--quaternary--bg-color);
 }
