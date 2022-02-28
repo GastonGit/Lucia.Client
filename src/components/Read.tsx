@@ -82,62 +82,70 @@ export default function Read(): JSX.Element | null {
             <ImageList
                 sx={{
                     width: 1890,
+                    height: 926,
                     borderStyle: 'solid',
                     borderWidth: '5px',
                     borderColor: 'var(--quaternary--bg-color)',
                     backgroundColor: 'var(--quaternary--bg-color)',
+                    overflow: 'hidden',
                 }}
                 cols={3}
                 rowHeight={926}
                 gap={6}
             >
-                <Link
-                    key="backButton"
-                    component="button"
-                    onClick={() => {
-                        onImageClick(backIndex);
-                    }}
-                >
-                    <ImageListItem
-                        sx={{ filter: blurFilter, opacity: backOpacity }}
+                <ImageListItem cols={1} key="backButton">
+                    <Link
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            filter: blurFilter,
+                            opacity: backOpacity,
+                        }}
+                        component="button"
+                        onClick={() => {
+                            onImageClick(backIndex);
+                        }}
                     >
                         <img
                             src={backLink}
                             alt={'viewed-page'}
-                            className="objectFit__contain"
+                            className="read__image-contain"
                         />
-                    </ImageListItem>
-                </Link>
-                <Link
-                    key="centerButton"
-                    component="button"
-                    onClick={centerView}
-                >
-                    <ImageListItem>
+                    </Link>
+                </ImageListItem>
+                <ImageListItem cols={1} key="centerButton">
+                    <Link
+                        sx={{ width: '100%', height: '100%' }}
+                        component="button"
+                        onClick={centerView}
+                    >
                         <img
                             src={currentImagePath}
                             alt={'viewed-page'}
-                            className="objectFit__contain"
+                            className="read__image-contain"
                         />
-                    </ImageListItem>
-                </Link>
-                <Link
-                    key="nextButton"
-                    component="button"
-                    onClick={() => {
-                        onImageClick(forwardIndex);
-                    }}
-                >
-                    <ImageListItem
-                        sx={{ filter: blurFilter, opacity: forwardOpacity }}
+                    </Link>
+                </ImageListItem>
+                <ImageListItem cols={1} key="nextButton">
+                    <Link
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            filter: blurFilter,
+                            opacity: forwardOpacity,
+                        }}
+                        component="button"
+                        onClick={() => {
+                            onImageClick(forwardIndex);
+                        }}
                     >
                         <img
                             src={forwardLink}
                             alt={'viewed-page'}
-                            className="objectFit__contain"
+                            className="read__image-contain"
                         />
-                    </ImageListItem>
-                </Link>
+                    </Link>
+                </ImageListItem>
             </ImageList>,
         );
         centerView();
@@ -160,7 +168,6 @@ export default function Read(): JSX.Element | null {
                     <Typography variant="h2" color="var(--main-text-color)">
                         {manga.title}
                     </Typography>
-
                     <div ref={myRef}>{currentImage}</div>
                     <ImageList
                         sx={{
