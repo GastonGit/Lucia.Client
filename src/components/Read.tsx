@@ -63,18 +63,18 @@ export default function Read(): JSX.Element | null {
         let forwardOpacity = opacity;
 
         if (index >= 1) {
-            backLink = manga.images[index - 1];
+            backLink = manga.thumbnails[index - 1];
             backIndex = index - 1;
         } else {
-            backLink = manga.images[index];
+            backLink = manga.thumbnails[index];
             backOpacity = '0';
         }
 
         if (index + 2 <= manga.images.length) {
-            forwardLink = manga.images[index + 1];
+            forwardLink = manga.thumbnails[index + 1];
             forwardIndex = index + 1;
         } else {
-            forwardLink = manga.images[index];
+            forwardLink = manga.thumbnails[index];
             forwardOpacity = '0';
         }
 
