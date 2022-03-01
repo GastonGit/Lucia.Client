@@ -106,9 +106,7 @@ export default function Read(): JSX.Element | null {
                         onImageClick(backIndex, mainCols);
                     }}
                     className={
-                        mainCols === 1
-                            ? 'read__page_change-normal'
-                            : 'read__page_change-zoom'
+                        mainCols === 1 ? 'side__page-normal' : 'side__page-zoom'
                     }
                 >
                     <img
@@ -116,8 +114,8 @@ export default function Read(): JSX.Element | null {
                         alt={'Former page'}
                         className={
                             mainCols === 1
-                                ? 'read__side_image-normal'
-                                : 'read__side_image-zoom'
+                                ? 'side__image-normal'
+                                : 'side__image-zoom side__image-left'
                         }
                     />
                 </Link>
@@ -127,9 +125,7 @@ export default function Read(): JSX.Element | null {
                         onImageClick(index, mainCols === 1 ? 3 : 1);
                     }}
                     className={
-                        mainCols === 1
-                            ? 'read__current_page-normal'
-                            : 'read__current_page-zoom'
+                        mainCols === 1 ? 'main__page-normal' : 'main__page-zoom'
                     }
                 >
                     <img
@@ -137,8 +133,8 @@ export default function Read(): JSX.Element | null {
                         alt={'Currently viewed page'}
                         className={
                             mainCols === 1
-                                ? 'read__current_image-normal'
-                                : 'read__current_image-zoom'
+                                ? 'main__image-normal'
+                                : 'main__image-zoom'
                         }
                     />
                 </Link>
@@ -152,9 +148,7 @@ export default function Read(): JSX.Element | null {
                         onImageClick(forwardIndex, mainCols);
                     }}
                     className={
-                        mainCols === 1
-                            ? 'read__page_change-normal'
-                            : 'read__page_change-zoom'
+                        mainCols === 1 ? 'side__page-normal' : 'side__page-zoom'
                     }
                 >
                     <img
@@ -162,8 +156,8 @@ export default function Read(): JSX.Element | null {
                         alt={'Next page'}
                         className={
                             mainCols === 1
-                                ? 'read__current_image-normal'
-                                : 'read__current_image-zoom'
+                                ? 'side__image-normal'
+                                : 'side__image-zoom  side__image-right'
                         }
                     />
                 </Link>
