@@ -14,6 +14,7 @@ ReactDOM.render(
             <Routes>
                 <Route path="/" element={<Gallery />} />
                 <Route path="/:id" element={<Read />} />
+                <Route path="/search" element={<Gallery />} />
             </Routes>
         </React.StrictMode>
     </BrowserRouter>,

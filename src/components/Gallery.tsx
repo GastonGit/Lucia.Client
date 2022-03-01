@@ -15,24 +15,56 @@ export default function Gallery(): JSX.Element | null {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        fetch('' + process.env.REACT_APP_API_SERVER + '/gallery?page=' + page)
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    for (let i = 0; i < result.length; i++) {
-                        const img = new Image();
-                        img.src = result[i].thumbnail;
-                    }
-                    setGallery(result.gallery);
-                    setMaxPageCount(result.maxPageCount);
-                    setIsLoaded(true);
-                },
-                (error) => {
-                    setError(error);
-                    setIsLoaded(true);
-                },
-            );
-    }, [page]);
+        if ((searchParams.get('search') as string) !== null) {
+            let searchPage = 1;
+
+            if ((searchParams.get('page') as string) !== null) {
+                searchPage = parseInt(searchParams.get('page') as string);
+            }
+
+            fetch(
+                (('' +
+                    process.env.REACT_APP_API_SERVER +
+                    '/search?title=' +
+                    searchParams.get('search')) as string) +
+                    '&page=' +
+                    searchPage,
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setGallery(result.gallery);
+                        setPage(parseInt(searchParams.get('page') as string));
+                        setMaxPageCount(result.maxPageCount);
+                        setIsLoaded(true);
+                    },
+                    (error) => {
+                        setError(error);
+                        setIsLoaded(true);
+                    },
+                );
+        } else {
+            fetch(
+                '' + process.env.REACT_APP_API_SERVER + '/gallery?page=' + page,
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        for (let i = 0; i < result.length; i++) {
+                            const img = new Image();
+                            img.src = result[i].thumbnail;
+                        }
+                        setGallery(result.gallery);
+                        setMaxPageCount(result.maxPageCount);
+                        setIsLoaded(true);
+                    },
+                    (error) => {
+                        setError(error);
+                        setIsLoaded(true);
+                    },
+                );
+        }
+    }, [page, searchParams]);
 
     let pageNumber = parseInt(searchParams.get('page') as string);
     if (Number.isNaN(pageNumber)) {
@@ -46,11 +78,24 @@ export default function Gallery(): JSX.Element | null {
         _event: React.ChangeEvent<unknown>,
         value: number,
     ) => {
-        if (value > 0 && value < 3) {
-            setSearchParams({ ['page']: value.toString() });
+        if ((searchParams.get('search') as string) === null) {
+            if (value > 0 && value <= maxPageCount) {
+                setSearchParams({ ['page']: value.toString() });
 
-            if (value !== page) {
-                setPage(value);
+                if (value !== page) {
+                    setPage(value);
+                }
+            }
+        } else {
+            if (value > 0 && value <= maxPageCount) {
+                setSearchParams({
+                    ['search']: searchParams.get('search') as string,
+                    ['page']: value.toString(),
+                });
+
+                if (value !== page) {
+                    setPage(value);
+                }
             }
         }
     };
