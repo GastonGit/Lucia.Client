@@ -27,8 +27,10 @@ export default function Read(): JSX.Element | null {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    setManga(result);
-                    setIsLoaded(true);
+                    if (result.length !== 0) {
+                        setManga(result[0]);
+                        setIsLoaded(true);
+                    }
                 },
                 (error) => {
                     setError(error);
