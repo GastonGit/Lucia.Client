@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/Gallery.css';
+import '../styles/Read.css';
 import { useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import { Fade, Link, Stack, Typography } from '@mui/material';
@@ -49,7 +49,7 @@ export default function Read(): JSX.Element | null {
         }
     }
 
-    function onImageClick(index: number) {
+    function onImageClick(index: number, mainCols: number) {
         const currentImagePath = manga.images[index];
         const blurFilter = 'blur(4px)';
         const opacity = '0.25';
@@ -79,21 +79,111 @@ export default function Read(): JSX.Element | null {
         }
 
         setCurrentImage(
-            <ImageList
+            <Stack
                 sx={{
                     width: 1890,
-                    height: 926,
+                    minHeight: 926,
                     borderStyle: 'solid',
                     borderWidth: '5px',
                     borderColor: 'var(--quaternary--bg-color)',
                     backgroundColor: 'var(--quaternary--bg-color)',
                     overflow: 'hidden',
                 }}
-                cols={3}
+                direction="row"
+                justifyContent="space-around"
+                alignItems="stretch"
+                spacing={0.5}
+            >
+                <Link
+                    sx={{
+                        filter: blurFilter,
+                        opacity: backOpacity,
+                    }}
+                    component="button"
+                    onClick={() => {
+                        onImageClick(backIndex, mainCols);
+                    }}
+                    className={
+                        mainCols === 1
+                            ? 'read__page_change-normal'
+                            : 'read__page_change-zoom'
+                    }
+                >
+                    <img
+                        src={backLink}
+                        alt={'Former page'}
+                        className={
+                            mainCols === 1
+                                ? 'read__side_image-normal'
+                                : 'read__side_image-zoom'
+                        }
+                    />
+                </Link>
+                <Link
+                    component="button"
+                    onClick={() => {
+                        onImageClick(index, mainCols === 1 ? 3 : 1);
+                    }}
+                    className={
+                        mainCols === 1
+                            ? 'read__current_page-normal'
+                            : 'read__current_page-zoom'
+                    }
+                >
+                    <img
+                        src={currentImagePath}
+                        alt={'Currently viewed page'}
+                        className={
+                            mainCols === 1
+                                ? 'read__current_image-normal'
+                                : 'read__current_image-zoom'
+                        }
+                    />
+                </Link>
+                <Link
+                    sx={{
+                        filter: blurFilter,
+                        opacity: forwardOpacity,
+                    }}
+                    component="button"
+                    onClick={() => {
+                        onImageClick(forwardIndex, mainCols);
+                    }}
+                    className={
+                        mainCols === 1
+                            ? 'read__page_change-normal'
+                            : 'read__page_change-zoom'
+                    }
+                >
+                    <img
+                        src={forwardLink}
+                        alt={'Next page'}
+                        className={
+                            mainCols === 1
+                                ? 'read__current_image-normal'
+                                : 'read__current_image-zoom'
+                        }
+                    />
+                </Link>
+            </Stack>,
+        );
+        centerView();
+
+        /*
+                    <ImageList
+                sx={{
+                    minWidth: 1890,
+                    borderStyle: 'solid',
+                    borderWidth: '5px',
+                    borderColor: 'var(--quaternary--bg-color)',
+                    backgroundColor: 'var(--quaternary--bg-color)',
+                    overflow: 'hidden',
+                }}
+                cols={listCols}
                 rowHeight={926}
                 gap={6}
             >
-                <ImageListItem cols={1} key="backButton">
+                <ImageListItem cols={1} rows={1} key="backButton">
                     <Link
                         sx={{
                             width: '100%',
@@ -103,7 +193,7 @@ export default function Read(): JSX.Element | null {
                         }}
                         component="button"
                         onClick={() => {
-                            onImageClick(backIndex);
+                            onImageClick(backIndex, mainCols);
                         }}
                     >
                         <img
@@ -113,20 +203,30 @@ export default function Read(): JSX.Element | null {
                         />
                     </Link>
                 </ImageListItem>
-                <ImageListItem cols={1} key="centerButton">
+                <ImageListItem
+                    cols={mainCols}
+                    rows={mainCols === 1 ? 1 : 2}
+                    key="centerButton"
+                >
                     <Link
                         sx={{ width: '100%', height: '100%' }}
                         component="button"
-                        onClick={centerView}
+                        onClick={() => {
+                            onImageClick(index, mainCols === 1 ? 3 : 1);
+                        }}
                     >
                         <img
                             src={currentImagePath}
                             alt={'viewed-page'}
-                            className="read__image-contain"
+                            className={
+                                mainCols === 1
+                                    ? 'read__image-contain'
+                                    : 'read__image-contain2'
+                            }
                         />
                     </Link>
                 </ImageListItem>
-                <ImageListItem cols={1} key="nextButton">
+                <ImageListItem cols={1} rows={1} key="nextButton">
                     <Link
                         sx={{
                             width: '100%',
@@ -136,7 +236,7 @@ export default function Read(): JSX.Element | null {
                         }}
                         component="button"
                         onClick={() => {
-                            onImageClick(forwardIndex);
+                            onImageClick(forwardIndex, mainCols);
                         }}
                     >
                         <img
@@ -147,8 +247,7 @@ export default function Read(): JSX.Element | null {
                     </Link>
                 </ImageListItem>
             </ImageList>,
-        );
-        centerView();
+         */
     }
 
     if (error) {
@@ -189,7 +288,7 @@ export default function Read(): JSX.Element | null {
                                 <Link
                                     component="button"
                                     onClick={() => {
-                                        onImageClick(index);
+                                        onImageClick(index, 1);
                                     }}
                                     sx={{
                                         backgroundColor:

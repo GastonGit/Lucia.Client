@@ -121,7 +121,6 @@ export default function Gallery(): JSX.Element | null {
                                                     'Thumbnail for ' +
                                                     item.title
                                                 }
-                                                className="objectFit__contain"
                                             />
                                         </ImageListItem>
                                     </div>
