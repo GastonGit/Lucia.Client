@@ -130,7 +130,6 @@ export default function Gallery(): JSX.Element | null {
                             (item: {
                                 thumbnail: string;
                                 title: string;
-                                author: string;
                                 id: string;
                             }) => (
                                 <Link
@@ -149,12 +148,8 @@ export default function Gallery(): JSX.Element | null {
                                         >
                                             <ImageListItemBar
                                                 title={item.title}
-                                                subtitle={
-                                                    <span>
-                                                        by: {item.author}
-                                                    </span>
-                                                }
                                                 sx={{
+                                                    opacity: 0.96,
                                                     color: 'var(--quinary--bg-color)',
                                                     backgroundColor:
                                                         'var(--quaternary--bg-color)',
