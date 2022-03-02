@@ -23,7 +23,11 @@ export default function Header(): JSX.Element {
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        setSearchParams({ ['search']: searchValue, ['page']: '1' });
+        if (searchValue.trim() !== '') {
+            setSearchParams({ ['search']: searchValue, ['page']: '1' });
+        } else {
+            setSearchParams('');
+        }
     }
 
     useEffect(() => {
