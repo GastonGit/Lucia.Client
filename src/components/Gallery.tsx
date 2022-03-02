@@ -4,7 +4,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import { Stack, Link, Fade, Pagination } from '@mui/material';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Gallery(): JSX.Element | null {
     const [error, setError] = useState(null);
@@ -13,6 +13,17 @@ export default function Gallery(): JSX.Element | null {
     const [maxPageCount, setMaxPageCount] = useState(0);
     const [page, setPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
+
+    function onMangaSubmit(
+        event:
+            | React.MouseEvent<HTMLSpanElement, MouseEvent>
+            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        id: string,
+    ) {
+        event.preventDefault();
+        navigate('/' + id);
+    }
 
     useEffect(() => {
         if ((searchParams.get('search') as string) !== null) {
@@ -133,11 +144,14 @@ export default function Gallery(): JSX.Element | null {
                                 id: string;
                             }) => (
                                 <Link
-                                    key={item.id}
-                                    href={'/' + item.id}
                                     sx={{
                                         backgroundColor:
                                             'var(--quaternary--bg-color)',
+                                    }}
+                                    href={'#'}
+                                    key={item.id}
+                                    onClick={(event) => {
+                                        onMangaSubmit(event, item.id);
                                     }}
                                 >
                                     <div>
