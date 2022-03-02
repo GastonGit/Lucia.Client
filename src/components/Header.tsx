@@ -10,11 +10,12 @@ import {
     Toolbar,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function Header(): JSX.Element {
     const [searchValue, setSearchValue] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
@@ -28,6 +29,15 @@ export default function Header(): JSX.Element {
         } else {
             setSearchParams('');
         }
+    }
+
+    function goHome(
+        event:
+            | React.MouseEvent<HTMLSpanElement, MouseEvent>
+            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    ) {
+        event.preventDefault();
+        navigate('/');
     }
 
     useEffect(() => {
@@ -46,10 +56,13 @@ export default function Header(): JSX.Element {
                     sx={{ py: { xs: 1, md: 0.5 } }}
                 >
                     <Link
-                        href="/"
+                        sx={{ mr: 2 }}
+                        href="#"
                         variant="h4"
                         className="title__link"
-                        sx={{ mr: 2 }}
+                        onClick={(event) => {
+                            goHome(event);
+                        }}
                     >
                         Lucia
                     </Link>
