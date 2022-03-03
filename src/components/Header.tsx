@@ -37,6 +37,7 @@ export default function Header(): JSX.Element {
             | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     ) {
         event.preventDefault();
+        setSearchValue('');
         navigate('/');
     }
 
