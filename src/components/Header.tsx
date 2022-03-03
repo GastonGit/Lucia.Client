@@ -12,6 +12,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import {
     createSearchParams,
+    useLocation,
     useNavigate,
     useSearchParams,
 } from 'react-router-dom';
@@ -19,7 +20,15 @@ import {
 export default function Header(): JSX.Element {
     const [searchValue, setSearchValue] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
+    const pureNavigate = useNavigate();
+    const location = useLocation();
+    const pathname = location.pathname + location.search;
+
+    function navigate(url: string) {
+        if (pathname !== url) {
+            pureNavigate(url);
+        }
+    }
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
