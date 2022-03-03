@@ -9,11 +9,22 @@ import ImageListItem from '@mui/material/ImageListItem';
 export default function Read(): JSX.Element | null {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [manga, setManga] = useState({
+    const [mangaInfo, setMangaInfo] = useState({
         author: '',
         title: '',
         images: [],
-        thumbnails: [],
+    });
+    const [mangaThumbnails, setMangaThumbnails] = useState([]);
+    const [readInformation, setReadInformation] = useState({
+        index: -1,
+        mainCols: -1,
+        currentImagePath: '',
+        backLink: '',
+        backOpacity: '',
+        backIndex: -1,
+        forwardLink: '',
+        forwardOpacity: '',
+        forwardIndex: -1,
     });
     const [currentImage, setCurrentImage] = useState(<div></div>);
     const myRef = useRef(null);
@@ -28,7 +39,12 @@ export default function Read(): JSX.Element | null {
             .then(
                 (result) => {
                     if (result.length !== 0) {
-                        setManga(result[0]);
+                        setMangaInfo({
+                            author: result[0].author,
+                            title: result[0].title,
+                            images: result[0].images,
+                        });
+                        setMangaThumbnails(result[0].thumbnails);
                         setIsLoaded(true);
                     }
                 },
@@ -51,9 +67,116 @@ export default function Read(): JSX.Element | null {
         }
     }
 
-    function onImageClick(index: number, mainCols: number) {
-        const currentImagePath = manga.images[index];
+    useEffect(() => {
         const blurFilter = 'blur(4px)';
+        if (readInformation.mainCols !== -1) {
+            setCurrentImage(
+                <Stack
+                    sx={{
+                        width: 1890,
+                        minHeight: 926,
+                        borderStyle: 'solid',
+                        borderWidth: '5px',
+                        borderColor: 'var(--quaternary--bg-color)',
+                        backgroundColor: 'var(--quaternary--bg-color)',
+                        overflow: 'hidden',
+                    }}
+                    direction="row"
+                    justifyContent="space-around"
+                    alignItems="stretch"
+                    spacing={0.5}
+                >
+                    <Link
+                        sx={{
+                            filter: blurFilter,
+                            opacity: readInformation.backOpacity,
+                        }}
+                        component="button"
+                        onClick={() => {
+                            onImageClick(
+                                readInformation.backIndex,
+                                readInformation.mainCols,
+                            );
+                        }}
+                        className={
+                            readInformation.mainCols === 1
+                                ? 'side__page-normal'
+                                : 'side__page-zoom'
+                        }
+                    >
+                        <img
+                            src={readInformation.backLink}
+                            alt={'Former page'}
+                            className={
+                                readInformation.mainCols === 1
+                                    ? 'side__image-normal'
+                                    : 'side__image-zoom side__image-left'
+                            }
+                        />
+                    </Link>
+                    <Link
+                        component="button"
+                        onClick={() => {
+                            onImageClick(
+                                readInformation.index,
+                                readInformation.mainCols === 1 ? 3 : 1,
+                            );
+                        }}
+                        className={
+                            readInformation.mainCols === 1
+                                ? 'main__page-normal'
+                                : 'main__page-zoom'
+                        }
+                    >
+                        <img
+                            src={readInformation.currentImagePath}
+                            alt={'Currently viewed page'}
+                            className={
+                                readInformation.mainCols === 1
+                                    ? 'main__image-normal'
+                                    : 'main__image-zoom'
+                            }
+                        />
+                    </Link>
+                    <Link
+                        sx={{
+                            filter: blurFilter,
+                            opacity: readInformation.forwardOpacity,
+                        }}
+                        component="button"
+                        onClick={() => {
+                            onImageClick(
+                                readInformation.forwardIndex,
+                                readInformation.mainCols,
+                            );
+                        }}
+                        className={
+                            readInformation.mainCols === 1
+                                ? 'side__page-normal'
+                                : 'side__page-zoom'
+                        }
+                    >
+                        <img
+                            src={readInformation.forwardLink}
+                            alt={'Next page'}
+                            className={
+                                readInformation.mainCols === 1
+                                    ? 'side__image-normal'
+                                    : 'side__image-zoom  side__image-right'
+                            }
+                        />
+                    </Link>
+                </Stack>,
+            );
+            centerView();
+        }
+    }, [readInformation]);
+
+    function onImageClick(index: number, mainCols: number) {
+        const currentImagePath = mangaInfo.images[index];
+        const updatedThumbnails = [...mangaThumbnails];
+        updatedThumbnails[index] = currentImagePath;
+
         const opacity = '0.25';
 
         let backLink;
@@ -65,105 +188,38 @@ export default function Read(): JSX.Element | null {
         let forwardOpacity = opacity;
 
         if (index >= 1) {
-            backLink = manga.thumbnails[index - 1];
+            backLink = updatedThumbnails[index - 1];
             backIndex = index - 1;
+            updatedThumbnails[backIndex] = mangaInfo.images[backIndex];
         } else {
-            backLink = manga.thumbnails[index];
+            backLink = updatedThumbnails[index];
             backOpacity = '0';
         }
 
-        if (index + 2 <= manga.images.length) {
-            forwardLink = manga.thumbnails[index + 1];
+        if (index + 2 <= mangaInfo.images.length) {
+            forwardLink = updatedThumbnails[index + 1];
             forwardIndex = index + 1;
+            updatedThumbnails[forwardIndex] = mangaInfo.images[forwardIndex];
+            if (index + 3 <= mangaInfo.images.length) {
+                updatedThumbnails[forwardIndex + 1] =
+                    mangaInfo.images[forwardIndex + 1];
+            }
         } else {
-            forwardLink = manga.thumbnails[index];
+            forwardLink = updatedThumbnails[index];
             forwardOpacity = '0';
         }
-
-        setCurrentImage(
-            <Stack
-                sx={{
-                    width: 1890,
-                    minHeight: 926,
-                    borderStyle: 'solid',
-                    borderWidth: '5px',
-                    borderColor: 'var(--quaternary--bg-color)',
-                    backgroundColor: 'var(--quaternary--bg-color)',
-                    overflow: 'hidden',
-                }}
-                direction="row"
-                justifyContent="space-around"
-                alignItems="stretch"
-                spacing={0.5}
-            >
-                <Link
-                    sx={{
-                        filter: blurFilter,
-                        opacity: backOpacity,
-                    }}
-                    component="button"
-                    onClick={() => {
-                        onImageClick(backIndex, mainCols);
-                    }}
-                    className={
-                        mainCols === 1 ? 'side__page-normal' : 'side__page-zoom'
-                    }
-                >
-                    <img
-                        src={backLink}
-                        alt={'Former page'}
-                        className={
-                            mainCols === 1
-                                ? 'side__image-normal'
-                                : 'side__image-zoom side__image-left'
-                        }
-                    />
-                </Link>
-                <Link
-                    component="button"
-                    onClick={() => {
-                        onImageClick(index, mainCols === 1 ? 3 : 1);
-                    }}
-                    className={
-                        mainCols === 1 ? 'main__page-normal' : 'main__page-zoom'
-                    }
-                >
-                    <img
-                        src={currentImagePath}
-                        alt={'Currently viewed page'}
-                        className={
-                            mainCols === 1
-                                ? 'main__image-normal'
-                                : 'main__image-zoom'
-                        }
-                    />
-                </Link>
-                <Link
-                    sx={{
-                        filter: blurFilter,
-                        opacity: forwardOpacity,
-                    }}
-                    component="button"
-                    onClick={() => {
-                        onImageClick(forwardIndex, mainCols);
-                    }}
-                    className={
-                        mainCols === 1 ? 'side__page-normal' : 'side__page-zoom'
-                    }
-                >
-                    <img
-                        src={forwardLink}
-                        alt={'Next page'}
-                        className={
-                            mainCols === 1
-                                ? 'side__image-normal'
-                                : 'side__image-zoom  side__image-right'
-                        }
-                    />
-                </Link>
-            </Stack>,
-        );
-        centerView();
+        setMangaThumbnails(updatedThumbnails);
+        setReadInformation({
+            index: index,
+            mainCols: mainCols,
+            currentImagePath: currentImagePath,
+            backLink: backLink,
+            backOpacity: backOpacity,
+            backIndex: backIndex,
+            forwardLink: forwardLink,
+            forwardOpacity: forwardOpacity,
+            forwardIndex: forwardIndex,
+        });
     }
 
     if (error) {
@@ -181,7 +237,7 @@ export default function Read(): JSX.Element | null {
                     mb={2}
                 >
                     <Typography variant="h2" color="var(--main-text-color)">
-                        {manga.title}
+                        {mangaInfo.title}
                     </Typography>
                     <div ref={myRef}>{currentImage}</div>
                     <ImageList
@@ -196,7 +252,7 @@ export default function Read(): JSX.Element | null {
                         rowHeight={380}
                         gap={6}
                     >
-                        {manga.thumbnails.map((image: string, index) => (
+                        {mangaThumbnails.map((image: string, index) => (
                             <StyledTooltip
                                 title={'Page ' + (index + 1)}
                                 key={index}
@@ -214,7 +270,7 @@ export default function Read(): JSX.Element | null {
                                     <ImageListItem>
                                         <img
                                             src={image}
-                                            alt={'Image for ' + manga.title}
+                                            alt={'Image for ' + mangaInfo.title}
                                             className="objectFit__contain"
                                         />
                                     </ImageListItem>
