@@ -55,8 +55,10 @@ export default function Header(): JSX.Element {
         const search = searchParams.get('search') as string;
         if (search !== null && search !== searchValue) {
             setSearchValue(search);
+        } else if (search === null) {
+            setSearchValue('');
         }
-    }, []);
+    }, [searchParams]);
 
     return (
         <Box sx={{ flexGrow: 1 }}>
