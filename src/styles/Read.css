@@ -14,8 +14,7 @@
 }
 
 .side__page-zoom{
-    flex-grow: 1;
-    width: auto;
+    width: 100%;
 }
 
 
