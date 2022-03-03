@@ -10,7 +10,11 @@ import {
     Toolbar,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import {
+    createSearchParams,
+    useNavigate,
+    useSearchParams,
+} from 'react-router-dom';
 
 export default function Header(): JSX.Element {
     const [searchValue, setSearchValue] = useState('');
@@ -25,7 +29,13 @@ export default function Header(): JSX.Element {
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         if (searchValue.trim() !== '') {
-            setSearchParams({ ['search']: searchValue, ['page']: '1' });
+            navigate(
+                '/?' +
+                    createSearchParams({
+                        ['search']: searchValue,
+                        ['page']: '1',
+                    }),
+            );
         } else {
             setSearchParams('');
         }
