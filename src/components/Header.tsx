@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import '../styles/Header.css';
 import {
     AppBar,
@@ -10,6 +10,8 @@ import {
     Toolbar,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setSearchValue } from '../features/search/search-slice';
 import {
     createSearchParams,
     useLocation,
@@ -18,7 +20,9 @@ import {
 } from 'react-router-dom';
 
 export default function Header(): JSX.Element {
-    const [searchValue, setSearchValue] = useState('');
+    const dispatch = useAppDispatch();
+    const searchValue = useAppSelector((state) => state.search.searchValue);
+
     const [searchParams, setSearchParams] = useSearchParams();
     const pureNavigate = useNavigate();
     const location = useLocation();
@@ -32,7 +36,7 @@ export default function Header(): JSX.Element {
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
-        setSearchValue(event.target.value.trim());
+        dispatch(setSearchValue(event.target.value.trim()));
     }
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -56,16 +60,16 @@ export default function Header(): JSX.Element {
             | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     ) {
         event.preventDefault();
-        setSearchValue('');
+        dispatch(setSearchValue(''));
         navigate('/');
     }
 
     useEffect(() => {
         const search = searchParams.get('search') as string;
         if (search !== null && search !== searchValue) {
-            setSearchValue(search);
+            dispatch(setSearchValue(search));
         } else if (search === null) {
-            setSearchValue('');
+            dispatch(setSearchValue(''));
         }
     }, [searchParams]);
 

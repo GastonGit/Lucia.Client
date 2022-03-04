@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import Gallery from './components/Gallery';
@@ -10,12 +12,14 @@ import Read from './components/Read';
 ReactDOM.render(
     <BrowserRouter>
         <React.StrictMode>
-            <Header />
-            <Routes>
-                <Route path="/" element={<Gallery />} />
-                <Route path="/:id" element={<Read />} />
-                <Route path="/search" element={<Gallery />} />
-            </Routes>
+            <Provider store={store}>
+                <Header />
+                <Routes>
+                    <Route path="/" element={<Gallery />} />
+                    <Route path="/:id" element={<Read />} />
+                    <Route path="/search" element={<Gallery />} />
+                </Routes>
+            </Provider>
         </React.StrictMode>
     </BrowserRouter>,
     document.getElementById('root'),
