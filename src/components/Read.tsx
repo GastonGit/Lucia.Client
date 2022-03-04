@@ -271,7 +271,7 @@ export default function Read(): JSX.Element | null {
                                         <img
                                             src={image}
                                             alt={'Image for ' + mangaInfo.title}
-                                            className="objectFit__contain"
+                                            className="gallery__image"
                                         />
                                     </ImageListItem>
                                 </Link>

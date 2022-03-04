@@ -50,3 +50,8 @@
 .side__image-right{
     object-position: left;
 }
+
+
+.gallery__image {
+    object-fit: fill !important;
+}
