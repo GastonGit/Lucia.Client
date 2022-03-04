@@ -179,7 +179,7 @@ export default function Read(): JSX.Element | null {
 
         const opacity = '0.25';
 
-        const prevPreloadCount = 1;
+        const prevPreloadCount = 2;
         let prevLink = mangaThumbnails[index];
         let prevIndex = index;
         let prevOpacity = '0';
