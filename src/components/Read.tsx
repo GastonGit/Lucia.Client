@@ -179,34 +179,65 @@ export default function Read(): JSX.Element | null {
 
         const opacity = '0.25';
 
-        let backLink;
+        const backPreloadCount = 1;
+        const forwardPreloadCount = 3;
+
+        let backLink = mangaThumbnails[index];
         let backIndex = index;
-        let backOpacity = opacity;
+        let backOpacity = '0';
 
-        let forwardLink;
+        let forwardLink = mangaThumbnails[index];
         let forwardIndex = index;
-        let forwardOpacity = opacity;
+        let forwardOpacity = '0';
 
-        if (index >= 1) {
-            backLink = updatedThumbnails[index - 1];
-            backIndex = index - 1;
-            updatedThumbnails[backIndex] = mangaInfo.images[backIndex];
-        } else {
-            backLink = updatedThumbnails[index];
-            backOpacity = '0';
+        if (index > 0) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (backPreloadCount === 0) {
+                backIndex = index - 1;
+                backLink = mangaThumbnails[backIndex];
+                backOpacity = opacity;
+            } else {
+                for (let i = 0; i < backPreloadCount; i++) {
+                    if (i === 0) {
+                        backIndex = index - 1;
+                        backLink = mangaInfo.images[backIndex];
+                        backOpacity = opacity;
+                        updatedThumbnails[backIndex] =
+                            mangaInfo.images[backIndex];
+                    } else if (backIndex - i >= 0) {
+                        updatedThumbnails[backIndex - i] =
+                            mangaInfo.images[backIndex - i];
+                    } else {
+                        break;
+                    }
+                }
+            }
         }
 
-        if (index + 2 <= mangaInfo.images.length) {
-            forwardLink = updatedThumbnails[index + 1];
-            forwardIndex = index + 1;
-            updatedThumbnails[forwardIndex] = mangaInfo.images[forwardIndex];
-            if (index + 3 <= mangaInfo.images.length) {
-                updatedThumbnails[forwardIndex + 1] =
-                    mangaInfo.images[forwardIndex + 1];
+        if (index + 1 < mangaInfo.images.length) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (forwardPreloadCount === 0) {
+                forwardIndex = index + 1;
+                forwardLink = mangaThumbnails[forwardIndex];
+                forwardOpacity = opacity;
+            } else {
+                for (let i = 0; i < forwardPreloadCount; i++) {
+                    if (i === 0) {
+                        forwardIndex = index + 1;
+                        forwardLink = mangaInfo.images[forwardIndex];
+                        forwardOpacity = opacity;
+                        updatedThumbnails[forwardIndex] =
+                            mangaInfo.images[forwardIndex];
+                    } else if (forwardIndex + i < mangaInfo.images.length) {
+                        updatedThumbnails[forwardIndex + i] =
+                            mangaInfo.images[forwardIndex + i];
+                    } else {
+                        break;
+                    }
+                }
             }
-        } else {
-            forwardLink = updatedThumbnails[index];
-            forwardOpacity = '0';
         }
         setMangaThumbnails(updatedThumbnails);
         setReadInformation({
