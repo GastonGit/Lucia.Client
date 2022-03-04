@@ -32,12 +32,12 @@ export default function Header(): JSX.Element {
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
-        setSearchValue(event.target.value);
+        setSearchValue(event.target.value.trim());
     }
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        if (searchValue.trim() !== '') {
+        if (searchValue !== '') {
             navigate(
                 '/?' +
                     createSearchParams({
@@ -45,7 +45,7 @@ export default function Header(): JSX.Element {
                         ['page']: '1',
                     }),
             );
-        } else {
+        } else if (searchValue === '' && searchParams.toString() !== '') {
             setSearchParams('');
         }
     }
