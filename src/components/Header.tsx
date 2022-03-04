@@ -36,20 +36,23 @@ export default function Header(): JSX.Element {
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
         event.preventDefault();
-        dispatch(setSearchValue(event.target.value.trim()));
+        dispatch(setSearchValue(event.target.value));
     }
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        if (searchValue !== '') {
+        if (searchValue.trim() !== '') {
             navigate(
                 '/?' +
                     createSearchParams({
-                        ['search']: searchValue,
+                        ['search']: searchValue.trim(),
                         ['page']: '1',
                     }),
             );
-        } else if (searchValue === '' && searchParams.toString() !== '') {
+        } else if (
+            searchValue.trim() === '' &&
+            searchParams.toString() !== ''
+        ) {
             setSearchParams('');
         }
     }
