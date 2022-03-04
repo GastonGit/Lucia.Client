@@ -19,12 +19,12 @@ export default function Read(): JSX.Element | null {
         index: -1,
         mainCols: -1,
         currentImagePath: '',
-        backLink: '',
-        backOpacity: '',
-        backIndex: -1,
-        forwardLink: '',
-        forwardOpacity: '',
-        forwardIndex: -1,
+        prevLink: '',
+        prevOpacity: '',
+        prevIndex: -1,
+        nextLink: '',
+        nextOpacity: '',
+        nextIndex: -1,
     });
     const [currentImage, setCurrentImage] = useState(<div></div>);
     const myRef = useRef(null);
@@ -89,12 +89,12 @@ export default function Read(): JSX.Element | null {
                     <Link
                         sx={{
                             filter: blurFilter,
-                            opacity: readInformation.backOpacity,
+                            opacity: readInformation.prevOpacity,
                         }}
                         component="button"
                         onClick={() => {
                             onImageClick(
-                                readInformation.backIndex,
+                                readInformation.prevIndex,
                                 readInformation.mainCols,
                             );
                         }}
@@ -105,7 +105,7 @@ export default function Read(): JSX.Element | null {
                         }
                     >
                         <img
-                            src={readInformation.backLink}
+                            src={readInformation.prevLink}
                             alt={'Former page'}
                             className={
                                 readInformation.mainCols === 1
@@ -141,12 +141,12 @@ export default function Read(): JSX.Element | null {
                     <Link
                         sx={{
                             filter: blurFilter,
-                            opacity: readInformation.forwardOpacity,
+                            opacity: readInformation.nextOpacity,
                         }}
                         component="button"
                         onClick={() => {
                             onImageClick(
-                                readInformation.forwardIndex,
+                                readInformation.nextIndex,
                                 readInformation.mainCols,
                             );
                         }}
@@ -157,7 +157,7 @@ export default function Read(): JSX.Element | null {
                         }
                     >
                         <img
-                            src={readInformation.forwardLink}
+                            src={readInformation.nextLink}
                             alt={'Next page'}
                             className={
                                 readInformation.mainCols === 1
@@ -179,35 +179,34 @@ export default function Read(): JSX.Element | null {
 
         const opacity = '0.25';
 
-        const backPreloadCount = 1;
-        const forwardPreloadCount = 3;
+        const prevPreloadCount = 1;
+        let prevLink = mangaThumbnails[index];
+        let prevIndex = index;
+        let prevOpacity = '0';
 
-        let backLink = mangaThumbnails[index];
-        let backIndex = index;
-        let backOpacity = '0';
-
-        let forwardLink = mangaThumbnails[index];
-        let forwardIndex = index;
-        let forwardOpacity = '0';
+        const nextPreloadCount = 3;
+        let nextLink = mangaThumbnails[index];
+        let nextIndex = index;
+        let nextOpacity = '0';
 
         if (index > 0) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            if (backPreloadCount === 0) {
-                backIndex = index - 1;
-                backLink = mangaThumbnails[backIndex];
-                backOpacity = opacity;
+            if (prevPreloadCount === 0) {
+                prevIndex = index - 1;
+                prevLink = mangaThumbnails[prevIndex];
+                prevOpacity = opacity;
             } else {
-                for (let i = 0; i < backPreloadCount; i++) {
+                for (let i = 0; i < prevPreloadCount; i++) {
                     if (i === 0) {
-                        backIndex = index - 1;
-                        backLink = mangaInfo.images[backIndex];
-                        backOpacity = opacity;
-                        updatedThumbnails[backIndex] =
-                            mangaInfo.images[backIndex];
-                    } else if (backIndex - i >= 0) {
-                        updatedThumbnails[backIndex - i] =
-                            mangaInfo.images[backIndex - i];
+                        prevIndex = index - 1;
+                        prevLink = mangaInfo.images[prevIndex];
+                        prevOpacity = opacity;
+                        updatedThumbnails[prevIndex] =
+                            mangaInfo.images[prevIndex];
+                    } else if (prevIndex - i >= 0) {
+                        updatedThumbnails[prevIndex - i] =
+                            mangaInfo.images[prevIndex - i];
                     } else {
                         break;
                     }
@@ -218,21 +217,21 @@ export default function Read(): JSX.Element | null {
         if (index + 1 < mangaInfo.images.length) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            if (forwardPreloadCount === 0) {
-                forwardIndex = index + 1;
-                forwardLink = mangaThumbnails[forwardIndex];
-                forwardOpacity = opacity;
+            if (nextPreloadCount === 0) {
+                nextIndex = index + 1;
+                nextLink = mangaThumbnails[nextIndex];
+                nextOpacity = opacity;
             } else {
-                for (let i = 0; i < forwardPreloadCount; i++) {
+                for (let i = 0; i < nextPreloadCount; i++) {
                     if (i === 0) {
-                        forwardIndex = index + 1;
-                        forwardLink = mangaInfo.images[forwardIndex];
-                        forwardOpacity = opacity;
-                        updatedThumbnails[forwardIndex] =
-                            mangaInfo.images[forwardIndex];
-                    } else if (forwardIndex + i < mangaInfo.images.length) {
-                        updatedThumbnails[forwardIndex + i] =
-                            mangaInfo.images[forwardIndex + i];
+                        nextIndex = index + 1;
+                        nextLink = mangaInfo.images[nextIndex];
+                        nextOpacity = opacity;
+                        updatedThumbnails[nextIndex] =
+                            mangaInfo.images[nextIndex];
+                    } else if (nextIndex + i < mangaInfo.images.length) {
+                        updatedThumbnails[nextIndex + i] =
+                            mangaInfo.images[nextIndex + i];
                     } else {
                         break;
                     }
@@ -244,12 +243,12 @@ export default function Read(): JSX.Element | null {
             index: index,
             mainCols: mainCols,
             currentImagePath: currentImagePath,
-            backLink: backLink,
-            backOpacity: backOpacity,
-            backIndex: backIndex,
-            forwardLink: forwardLink,
-            forwardOpacity: forwardOpacity,
-            forwardIndex: forwardIndex,
+            prevLink: prevLink,
+            prevOpacity: prevOpacity,
+            prevIndex: prevIndex,
+            nextLink: nextLink,
+            nextOpacity: nextOpacity,
+            nextIndex: nextIndex,
         });
     }
 
