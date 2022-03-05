@@ -86,7 +86,7 @@ export default function Header(): JSX.Element {
                 >
                     <Link
                         sx={{ mr: 2 }}
-                        href="#"
+                        href="/"
                         variant="h4"
                         className="title__link"
                         onClick={(event) => {
