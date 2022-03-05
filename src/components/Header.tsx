@@ -41,6 +41,7 @@ export default function Header(): JSX.Element {
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
         if (searchValue.trim() !== '') {
             navigate(
                 '/?' +
@@ -54,6 +55,8 @@ export default function Header(): JSX.Element {
             searchParams.toString() !== ''
         ) {
             setSearchParams('');
+        } else {
+            dispatch(setSearchValue(''));
         }
     }
 
