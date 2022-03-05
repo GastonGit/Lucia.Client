@@ -41,23 +41,24 @@ export default function Header(): JSX.Element {
 
     function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+        const trimmedSearchValue = searchValue.trim();
 
-        if (searchValue.trim() !== '') {
+        if (trimmedSearchValue !== '') {
+            console.log('1');
             navigate(
                 '/?' +
                     createSearchParams({
-                        ['search']: searchValue.trim(),
+                        ['search']: trimmedSearchValue,
                         ['page']: '1',
                     }),
             );
         } else if (
-            searchValue.trim() === '' &&
+            trimmedSearchValue === '' &&
             searchParams.toString() !== ''
         ) {
             setSearchParams('');
-        } else {
-            dispatch(setSearchValue(''));
         }
+        dispatch(setSearchValue(trimmedSearchValue));
     }
 
     function goHome(
