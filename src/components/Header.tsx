@@ -44,7 +44,6 @@ export default function Header(): JSX.Element {
         const trimmedSearchValue = searchValue.trim();
 
         if (trimmedSearchValue !== '') {
-            console.log('1');
             navigate(
                 '/?' +
                     createSearchParams({
