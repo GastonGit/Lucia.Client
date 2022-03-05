@@ -148,7 +148,7 @@ export default function Gallery(): JSX.Element | null {
                                         backgroundColor:
                                             'var(--quaternary--bg-color)',
                                     }}
-                                    href={'#'}
+                                    href={'/' + item.id}
                                     key={item.id}
                                     onClick={(event) => {
                                         onMangaSubmit(event, item.id);
