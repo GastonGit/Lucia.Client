@@ -66,8 +66,14 @@ export default function Header(): JSX.Element {
             | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
     ) {
         event.preventDefault();
-        dispatch(setSearchValue(''));
-        navigate('/');
+        const url = '/';
+
+        if (event.ctrlKey) {
+            window.open(url, '_blank');
+        } else {
+            dispatch(setSearchValue(''));
+            navigate(url);
+        }
     }
 
     useEffect(() => {
