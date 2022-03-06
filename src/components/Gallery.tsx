@@ -95,24 +95,17 @@ export default function Gallery(): JSX.Element | null {
         _event: React.ChangeEvent<unknown>,
         value: number,
     ) => {
-        if ((searchParams.get('search') as string) === null) {
-            if (value > 0 && value <= maxPageCount) {
+        if (value > 0 && value <= maxPageCount) {
+            if ((searchParams.get('search') as string) === null) {
                 setSearchParams({ ['page']: value.toString() });
-
-                if (value !== page) {
-                    setPage(value);
-                }
-            }
-        } else {
-            if (value > 0 && value <= maxPageCount) {
+            } else {
                 setSearchParams({
                     ['search']: searchParams.get('search') as string,
                     ['page']: value.toString(),
                 });
-
-                if (value !== page) {
-                    setPage(value);
-                }
+            }
+            if (value !== page) {
+                setPage(value);
             }
         }
     };
