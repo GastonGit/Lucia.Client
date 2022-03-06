@@ -22,7 +22,13 @@ export default function Gallery(): JSX.Element | null {
         id: string,
     ) {
         event.preventDefault();
-        navigate('/' + id);
+        const url = '/' + id;
+
+        if (event.ctrlKey) {
+            window.open(url, '_blank');
+        } else {
+            navigate(url);
+        }
     }
 
     useEffect(() => {
