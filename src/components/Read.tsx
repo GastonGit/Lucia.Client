@@ -212,6 +212,10 @@ export default function Read(): JSX.Element | null {
                     }
                 }
             }
+        } else if (index === 0) {
+            prevIndex = mangaThumbnails.length - 1;
+            prevLink = mangaThumbnails[prevIndex];
+            prevOpacity = '0';
         }
 
         if (index + 1 < mangaInfo.images.length) {
@@ -237,7 +241,12 @@ export default function Read(): JSX.Element | null {
                     }
                 }
             }
+        } else if (index + 1 === mangaInfo.images.length) {
+            nextIndex = 0;
+            nextLink = mangaThumbnails[nextIndex];
+            nextOpacity = '0';
         }
+
         setMangaThumbnails(updatedThumbnails);
         setReadInformation({
             index: index,
