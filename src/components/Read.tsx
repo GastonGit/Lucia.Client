@@ -7,7 +7,7 @@ import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 
 export default function Read(): JSX.Element | null {
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [mangaInfo, setMangaInfo] = useState({
         author: '',
@@ -260,8 +260,6 @@ export default function Read(): JSX.Element | null {
     }
 
     if (error) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         return <div>Error: {error.message}</div>;
     } else if (isLoaded) {
         return (
