@@ -26,7 +26,7 @@ export default function Read(): JSX.Element | null {
         nextOpacity: '',
         nextIndex: -1,
     });
-    const [currentImage, setCurrentImage] = useState(<div></div>);
+    const [currentImage, setCurrentImage] = useState(<div />);
     const myRef = useRef<HTMLDivElement>(null);
 
     const api = process.env.REACT_APP_API_SERVER || '';
