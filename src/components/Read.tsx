@@ -27,7 +27,7 @@ export default function Read(): JSX.Element | null {
         nextIndex: -1,
     });
     const [currentImage, setCurrentImage] = useState(<div></div>);
-    const myRef = useRef(null);
+    const myRef = useRef<HTMLDivElement>(null);
 
     const api = process.env.REACT_APP_API_SERVER || '';
     const pathname = useLocation().pathname;
@@ -61,8 +61,6 @@ export default function Read(): JSX.Element | null {
 
     function centerView() {
         if (myRef !== null && myRef.current !== null) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             myRef.current.scrollIntoView();
         }
     }
