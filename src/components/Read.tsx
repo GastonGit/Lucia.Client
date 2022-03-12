@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Read.css';
 import { useLocation } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
-import { Fade, Link, Stack, Typography } from '@mui/material';
+import { Divider, Fade, Grid, Link, Stack, Typography } from '@mui/material';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 
@@ -13,6 +13,7 @@ export default function Read(): JSX.Element | null {
         author: '',
         title: '',
         images: [],
+        tags: [],
     });
     const [mangaThumbnails, setMangaThumbnails] = useState([]);
     const [readInformation, setReadInformation] = useState({
@@ -43,6 +44,7 @@ export default function Read(): JSX.Element | null {
                             author: result[0].author,
                             title: result[0].title,
                             images: result[0].images,
+                            tags: result[0].tags,
                         });
                         setMangaThumbnails(result[0].thumbnails);
                         setIsLoaded(true);
@@ -271,9 +273,74 @@ export default function Read(): JSX.Element | null {
                     mt={2}
                     mb={2}
                 >
-                    <Typography variant="h2" color="var(--main-text-color)">
-                        {mangaInfo.title}
-                    </Typography>
+                    <Grid
+                        container
+                        sx={{
+                            width: 850,
+                            borderStyle: 'solid',
+                            borderWidth: '5px',
+                            borderColor: 'var(--quaternary--bg-color)',
+                            backgroundColor: 'var(--quaternary--bg-color)',
+                        }}
+                    >
+                        <Grid item xs={12}>
+                            <Typography
+                                align="center"
+                                variant="h2"
+                                color="var(--main-text-color)"
+                            >
+                                {mangaInfo.title}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Stack
+                                sx={{
+                                    height: '100%',
+                                    alignItems: 'center',
+                                    alignContent: 'center',
+                                    justifyContent: 'flex-start',
+                                }}
+                                spacing={1}
+                                direction="row"
+                            >
+                                <Typography
+                                    align="left"
+                                    variant="h4"
+                                    color="var(--main-text-color)"
+                                >
+                                    Tags:
+                                </Typography>
+                                <Stack
+                                    direction="row"
+                                    divider={
+                                        <Divider
+                                            orientation="vertical"
+                                            flexItem
+                                        />
+                                    }
+                                    spacing={1}
+                                    sx={{
+                                        height: '100%',
+                                        alignItems: 'center',
+                                        alignContent: 'center',
+                                        justifyContent: 'flex-start',
+                                    }}
+                                >
+                                    {mangaInfo.tags.map(
+                                        (tag: string, index) => (
+                                            <Typography
+                                                key={index}
+                                                variant="h5"
+                                                color="var(--main-text-color)"
+                                            >
+                                                {tag}
+                                            </Typography>
+                                        ),
+                                    )}
+                                </Stack>
+                            </Stack>
+                        </Grid>
+                    </Grid>
                     <div ref={myRef}>{currentImage}</div>
                     <ImageList
                         sx={{
