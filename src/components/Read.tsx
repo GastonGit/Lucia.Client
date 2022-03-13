@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Read.css';
-import { useLocation } from 'react-router-dom';
+import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import { Divider, Fade, Grid, Link, Stack, Typography } from '@mui/material';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 
 export default function Read(): JSX.Element | null {
+    const navigate = useNavigate();
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [mangaInfo, setMangaInfo] = useState({
@@ -65,6 +66,22 @@ export default function Read(): JSX.Element | null {
         if (myRef !== null && myRef.current !== null) {
             myRef.current.scrollIntoView();
         }
+    }
+
+    function onTagClick(
+        event:
+            | React.MouseEvent<HTMLSpanElement, MouseEvent>
+            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        tag: string,
+    ) {
+        event.preventDefault();
+        navigate(
+            '/?' +
+                createSearchParams({
+                    ['search']: tag,
+                    ['page']: '1',
+                }),
+        );
     }
 
     useEffect(() => {
@@ -328,13 +345,32 @@ export default function Read(): JSX.Element | null {
                                 >
                                     {mangaInfo.tags.map(
                                         (tag: string, index) => (
-                                            <Typography
-                                                key={index}
-                                                variant="h5"
-                                                color="var(--main-text-color)"
+                                            <Link
+                                                href={
+                                                    '/?search=' +
+                                                    tag.toLowerCase() +
+                                                    '&page=1'
+                                                }
+                                                onClick={(event) => {
+                                                    onTagClick(
+                                                        event,
+                                                        tag.toLowerCase(),
+                                                    );
+                                                }}
+                                                underline="none"
+                                                sx={{
+                                                    backgroundColor:
+                                                        'var(--quaternary--bg-color)',
+                                                }}
                                             >
-                                                {tag}
-                                            </Typography>
+                                                <Typography
+                                                    key={index}
+                                                    variant="h5"
+                                                    color="var(--main-text-color)"
+                                                >
+                                                    {tag}
+                                                </Typography>
+                                            </Link>
                                         ),
                                     )}
                                 </Stack>
