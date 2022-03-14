@@ -198,70 +198,62 @@ export default function Read(): JSX.Element | null {
 
         const prevPreloadCount = 2;
         let prevLink = mangaThumbnails[index];
-        let prevIndex = index;
+        let prevIndex;
         let prevOpacity = '0';
 
         const nextPreloadCount = 3;
         let nextLink = mangaThumbnails[index];
-        let nextIndex = index;
+        let nextIndex;
         let nextOpacity = '0';
 
-        if (index > 0) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            if (prevPreloadCount === 0) {
-                prevIndex = index - 1;
-                prevLink = mangaThumbnails[prevIndex];
-                prevOpacity = opacity;
-            } else {
-                for (let i = 0; i < prevPreloadCount; i++) {
-                    if (i === 0) {
-                        prevIndex = index - 1;
-                        prevLink = mangaInfo.images[prevIndex];
-                        prevOpacity = opacity;
-                        updatedThumbnails[prevIndex] =
-                            mangaInfo.images[prevIndex];
-                    } else if (prevIndex - i >= 0) {
-                        updatedThumbnails[prevIndex - i] =
-                            mangaInfo.images[prevIndex - i];
-                    } else {
-                        break;
-                    }
-                }
-            }
-        } else if (index === 0) {
+        if (index <= 0) {
             prevIndex = mangaThumbnails.length - 1;
-            prevLink = mangaThumbnails[prevIndex];
-            prevOpacity = '0';
+        } else {
+            prevIndex = index - 1;
+            prevOpacity = opacity;
         }
 
-        if (index + 1 < mangaInfo.images.length) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            if (nextPreloadCount === 0) {
-                nextIndex = index + 1;
-                nextLink = mangaThumbnails[nextIndex];
-                nextOpacity = opacity;
-            } else {
-                for (let i = 0; i < nextPreloadCount; i++) {
-                    if (i === 0) {
-                        nextIndex = index + 1;
-                        nextLink = mangaInfo.images[nextIndex];
-                        nextOpacity = opacity;
-                        updatedThumbnails[nextIndex] =
-                            mangaInfo.images[nextIndex];
-                    } else if (nextIndex + i < mangaInfo.images.length) {
-                        updatedThumbnails[nextIndex + i] =
-                            mangaInfo.images[nextIndex + i];
-                    } else {
-                        break;
-                    }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (prevPreloadCount <= 0) {
+            prevLink = mangaThumbnails[prevIndex];
+        } else {
+            for (let i = 0; i < prevPreloadCount; i++) {
+                if (i === 0) {
+                    prevLink = mangaInfo.images[prevIndex];
+                    updatedThumbnails[prevIndex] = mangaInfo.images[prevIndex];
+                } else if (prevIndex - i >= 0) {
+                    updatedThumbnails[prevIndex - i] =
+                        mangaInfo.images[prevIndex - i];
+                } else {
+                    break;
                 }
             }
-        } else if (index + 1 === mangaInfo.images.length) {
+        }
+
+        if (index + 1 === mangaInfo.images.length) {
             nextIndex = 0;
+        } else {
+            nextIndex = index + 1;
+            nextOpacity = opacity;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (nextPreloadCount <= 0) {
             nextLink = mangaThumbnails[nextIndex];
-            nextOpacity = '0';
+        } else {
+            for (let i = 0; i < nextPreloadCount; i++) {
+                if (i === 0) {
+                    nextLink = mangaInfo.images[nextIndex];
+                    updatedThumbnails[nextIndex] = mangaInfo.images[nextIndex];
+                } else if (nextIndex + i < mangaInfo.images.length) {
+                    updatedThumbnails[nextIndex + i] =
+                        mangaInfo.images[nextIndex + i];
+                } else {
+                    break;
+                }
+            }
         }
 
         setMangaThumbnails(updatedThumbnails);
