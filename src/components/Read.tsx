@@ -3,6 +3,7 @@ import '../styles/Read.css';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
 import { Divider, Fade, Grid, Link, Stack, Typography } from '@mui/material';
+import { useAppSelector } from '../app/hooks';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 
@@ -28,6 +29,7 @@ export default function Read(): JSX.Element | null {
         nextOpacity: '',
         nextIndex: -1,
     });
+    const preloadCount = useAppSelector((state) => state.settings.preloadCount);
     const [currentImage, setCurrentImage] = useState(<div />);
     const myRef = useRef<HTMLDivElement>(null);
 
@@ -196,12 +198,10 @@ export default function Read(): JSX.Element | null {
 
         const opacity = '0.25';
 
-        const prevPreloadCount = 2;
         let prevLink = mangaThumbnails[index];
         let prevIndex;
         let prevOpacity = '0';
 
-        const nextPreloadCount = 3;
         let nextLink = mangaThumbnails[index];
         let nextIndex;
         let nextOpacity = '0';
@@ -213,12 +213,10 @@ export default function Read(): JSX.Element | null {
             prevOpacity = opacity;
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (prevPreloadCount <= 0) {
+        if (preloadCount.previous <= 0) {
             prevLink = mangaThumbnails[prevIndex];
         } else {
-            for (let i = 0; i < prevPreloadCount; i++) {
+            for (let i = 0; i < preloadCount.previous; i++) {
                 if (i === 0) {
                     prevLink = mangaInfo.images[prevIndex];
                     updatedThumbnails[prevIndex] = mangaInfo.images[prevIndex];
@@ -238,12 +236,10 @@ export default function Read(): JSX.Element | null {
             nextOpacity = opacity;
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (nextPreloadCount <= 0) {
+        if (preloadCount.next <= 0) {
             nextLink = mangaThumbnails[nextIndex];
         } else {
-            for (let i = 0; i < nextPreloadCount; i++) {
+            for (let i = 0; i < preloadCount.next; i++) {
                 if (i === 0) {
                     nextLink = mangaInfo.images[nextIndex];
                     updatedThumbnails[nextIndex] = mangaInfo.images[nextIndex];
