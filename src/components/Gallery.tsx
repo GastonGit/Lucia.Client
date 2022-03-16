@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Gallery.css';
-import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import { Stack, Link, Fade, Pagination } from '@mui/material';
+import {
+    Stack,
+    Link,
+    Fade,
+    Pagination,
+    Grid,
+    GridSize,
+    Box,
+} from '@mui/material';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Gallery(): JSX.Element | null {
@@ -124,63 +131,68 @@ export default function Gallery(): JSX.Element | null {
                     mt={2}
                     mb={2}
                 >
-                    <ImageList
+                    <Box
                         sx={{
-                            width: 1700,
+                            maxWidth: 1700,
+                            overflow: 'hidden',
                             borderStyle: 'solid',
+                            borderRadius: '25px',
                             borderWidth: '5px',
                             borderColor: 'var(--quinary--bg-color)',
                             backgroundColor: 'var(--quinary--bg-color)',
                         }}
-                        cols={7}
-                        rowHeight={380}
-                        gap={6}
                     >
-                        {gallery.map(
-                            (item: {
-                                thumbnail: string;
-                                title: string;
-                                id: string;
-                            }) => (
-                                <Link
-                                    sx={{
-                                        backgroundColor:
-                                            'var(--quaternary--bg-color)',
-                                    }}
-                                    href={'/' + item.id}
-                                    key={item.id}
-                                    onClick={(event) => {
-                                        onMangaSubmit(event, item.id);
-                                    }}
-                                >
-                                    <div>
-                                        <ImageListItem
+                        <Grid container spacing={1} columns={28}>
+                            {gallery.map(
+                                (item: {
+                                    thumbnail: string;
+                                    title: string;
+                                    id: string;
+                                }) => (
+                                    <Grid
+                                        item
+                                        xs={28 as GridSize}
+                                        sm={7}
+                                        md={4}
+                                    >
+                                        <Link
                                             sx={{
-                                                objectFit: 'contain',
+                                                width: '100%',
+                                                backgroundColor:
+                                                    'var(--quaternary--bg-color)',
+                                            }}
+                                            href={'/' + item.id}
+                                            key={item.id}
+                                            onClick={(event) => {
+                                                onMangaSubmit(event, item.id);
                                             }}
                                         >
-                                            <ImageListItemBar
-                                                title={item.title}
-                                                sx={{
-                                                    opacity: 0.96,
-                                                    color: 'var(--quinary--bg-color)',
-                                                    backgroundColor:
-                                                        'var(--quaternary--bg-color)',
-                                                }}
-                                            />
-                                            <img
-                                                src={item.thumbnail}
-                                                alt={
-                                                    'Thumbnail for ' +
-                                                    item.title
-                                                }
-                                            />
-                                        </ImageListItem>
-                                    </div>
-                                </Link>
-                            ),
-                        )}
-                    </ImageList>
+                                            <ImageListItem
+                                                sx={{ width: '100%' }}
+                                            >
+                                                <ImageListItemBar
+                                                    title={item.title}
+                                                    sx={{
+                                                        opacity: 0.96,
+                                                        color: 'var(--quinary--bg-color)',
+                                                        backgroundColor:
+                                                            'var(--quaternary--bg-color)',
+                                                    }}
+                                                />
+                                                <img
+                                                    src={item.thumbnail}
+                                                    alt={
+                                                        'Thumbnail for ' +
+                                                        item.title
+                                                    }
+                                                />
+                                            </ImageListItem>
+                                        </Link>
+                                    </Grid>
+                                ),
+                            )}
+                        </Grid>
+                    </Box>
                     <Stack
                         spacing={2}
                         sx={{
