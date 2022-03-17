@@ -134,7 +134,7 @@ export default function Gallery(): JSX.Element | null {
                     <Box
                         sx={{
                             maxWidth: 1700,
-                            minWidth: 1700,
+                            minWidth: (1700 / 1920) * 100 + '%',
                             overflow: 'hidden',
                             borderStyle: 'solid',
                             borderRadius: '25px',
