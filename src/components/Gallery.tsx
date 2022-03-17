@@ -158,7 +158,7 @@ export default function Gallery(): JSX.Element | null {
                                 }) => (
                                     <Grid
                                         item
-                                        xs={28 as GridSize}
+                                        xs={14 as GridSize}
                                         sm={7}
                                         md={4}
                                     >
