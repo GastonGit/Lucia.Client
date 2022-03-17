@@ -2,10 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Read.css';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import ImageList from '@mui/material/ImageList';
-import { Divider, Fade, Grid, Link, Stack, Typography } from '@mui/material';
+import {
+    Box,
+    Divider,
+    Fade,
+    Grid,
+    GridSize,
+    Link,
+    Stack,
+    Typography,
+} from '@mui/material';
 import { useAppSelector } from '../app/hooks';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 export default function Read(): JSX.Element | null {
     const navigate = useNavigate();
@@ -366,44 +376,57 @@ export default function Read(): JSX.Element | null {
                         </Grid>
                     </Grid>
                     <div ref={myRef}>{currentImage}</div>
-                    <ImageList
+                    <Box
                         sx={{
-                            width: 1700,
+                            maxWidth: 1700,
+                            overflow: 'hidden',
                             borderStyle: 'solid',
+                            borderRadius: '25px',
                             borderWidth: '5px',
                             borderColor: 'var(--quinary--bg-color)',
                             backgroundColor: 'var(--quinary--bg-color)',
                         }}
-                        cols={7}
-                        rowHeight={380}
-                        gap={6}
                     >
-                        {mangaThumbnails.map((image: string, index) => (
-                            <StyledTooltip
-                                title={'Page ' + (index + 1)}
-                                key={index}
-                            >
-                                <Link
-                                    component="button"
-                                    onClick={() => {
-                                        onImageClick(index, 1);
-                                    }}
-                                    sx={{
-                                        backgroundColor:
-                                            'var(--quaternary--bg-color)',
-                                    }}
-                                >
-                                    <ImageListItem>
-                                        <img
-                                            src={image}
-                                            alt={'Image for ' + mangaInfo.title}
-                                            className="gallery__image"
-                                        />
-                                    </ImageListItem>
-                                </Link>
-                            </StyledTooltip>
-                        ))}
-                    </ImageList>
+                        <Grid container spacing={1} columns={28}>
+                            {mangaThumbnails.map((image: string, index) => (
+                                <Grid item xs={14 as GridSize} sm={5} md={4}>
+                                    <StyledTooltip
+                                        title={'Page ' + (index + 1)}
+                                        key={index}
+                                    >
+                                        <Link
+                                            component="button"
+                                            onClick={() => {
+                                                onImageClick(index, 1);
+                                            }}
+                                            sx={{
+                                                width: '100%',
+                                                height: '100%',
+                                                backgroundColor:
+                                                    'var(--quaternary--bg-color)',
+                                            }}
+                                        >
+                                            <ImageListItem
+                                                sx={{
+                                                    width: '100%',
+                                                    height: '100% !important',
+                                                }}
+                                            >
+                                                <img
+                                                    src={image}
+                                                    alt={
+                                                        'Image for ' +
+                                                        mangaInfo.title
+                                                    }
+                                                    className="gallery__image"
+                                                />
+                                            </ImageListItem>
+                                        </Link>
+                                    </StyledTooltip>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Box>
                 </Stack>
             </Fade>
         );
