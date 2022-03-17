@@ -10,10 +10,14 @@ import {
     Grid,
     GridSize,
     Box,
+    useMediaQuery,
 } from '@mui/material';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Gallery(): JSX.Element | null {
+    const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
+        noSsr: true,
+    });
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gallery, setGallery] = useState([]);
@@ -134,7 +138,9 @@ export default function Gallery(): JSX.Element | null {
                     <Box
                         sx={{
                             maxWidth: 1700,
-                            minWidth: (1700 / 1920) * 100 + '%',
+                            minWidth: screenWidthIsAbove1920
+                                ? 1700
+                                : (1700 / 1920) * 100 + '%',
                             overflow: 'hidden',
                             borderStyle: 'solid',
                             borderRadius: '25px',
