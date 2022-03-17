@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Read.css';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
-import ImageList from '@mui/material/ImageList';
 import {
     Box,
     Divider,
@@ -15,7 +14,6 @@ import {
 import { useAppSelector } from '../app/hooks';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
 
 export default function Read(): JSX.Element | null {
     const navigate = useNavigate();
