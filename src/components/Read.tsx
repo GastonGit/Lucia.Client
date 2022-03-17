@@ -10,12 +10,16 @@ import {
     Link,
     Stack,
     Typography,
+    useMediaQuery,
 } from '@mui/material';
 import { useAppSelector } from '../app/hooks';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 
 export default function Read(): JSX.Element | null {
+    const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
+        noSsr: true,
+    });
     const navigate = useNavigate();
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -377,7 +381,9 @@ export default function Read(): JSX.Element | null {
                     <Box
                         sx={{
                             maxWidth: 1700,
-                            minWidth: (1700 / 1920) * 100 + '%',
+                            minWidth: screenWidthIsAbove1920
+                                ? 1700
+                                : (1700 / 1920) * 100 + '%',
                             overflow: 'hidden',
                             borderStyle: 'solid',
                             borderRadius: '25px',
