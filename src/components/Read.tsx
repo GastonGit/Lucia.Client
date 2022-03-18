@@ -293,7 +293,10 @@ export default function Read(): JSX.Element | null {
                     <Grid
                         container
                         sx={{
-                            width: 850,
+                            maxWidth: 850,
+                            minWidth: screenWidthIsAbove1920
+                                ? 850
+                                : (850 / 1920) * 100 + '%',
                             borderStyle: 'solid',
                             borderWidth: '5px',
                             borderColor: 'var(--quaternary--bg-color)',
