@@ -55,3 +55,8 @@
 .gallery__image {
     object-fit: fill !important;
 }
+
+.page__counter {
+    color: var(--secondary-text-color);
+    text-shadow: 1px 1px var(--quaternary--bg-color);
+}

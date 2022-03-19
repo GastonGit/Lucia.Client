@@ -156,101 +156,124 @@ export default function Read(): JSX.Element | null {
                 );
             } else {
                 setCurrentImage(
-                    <Stack
-                        sx={{
-                            width: 1890,
-                            minHeight: 926,
-                            borderStyle: 'solid',
-                            borderWidth: '5px',
-                            borderColor: 'var(--quaternary--bg-color)',
-                            backgroundColor: 'var(--quaternary--bg-color)',
-                            overflow: 'hidden',
-                        }}
-                        direction="row"
-                        justifyContent="space-around"
-                        alignItems="stretch"
-                        spacing={0.5}
-                    >
-                        <Link
+                    <Stack direction="column">
+                        <Stack
                             sx={{
-                                filter: blurFilter,
-                                opacity: readInformation.prevOpacity,
+                                width: 1890,
+                                minHeight: 926,
+                                borderStyle: 'solid',
+                                borderWidth: '5px',
+                                borderColor: 'var(--quaternary--bg-color)',
+                                backgroundColor: 'var(--quaternary--bg-color)',
+                                overflow: 'hidden',
                             }}
-                            component="button"
-                            onClick={() => {
-                                onImageClick(
-                                    readInformation.prevIndex,
-                                    readInformation.mainCols,
-                                );
-                            }}
-                            className={
-                                readInformation.mainCols === 1
-                                    ? 'side__page-normal'
-                                    : 'side__page-zoom'
-                            }
+                            direction="row"
+                            justifyContent="space-around"
+                            alignItems="stretch"
+                            spacing={0.5}
                         >
-                            <img
-                                src={readInformation.prevLink}
-                                alt={'Former page'}
+                            <Link
+                                sx={{
+                                    filter: blurFilter,
+                                    opacity: readInformation.prevOpacity,
+                                }}
+                                component="button"
+                                onClick={() => {
+                                    onImageClick(
+                                        readInformation.prevIndex,
+                                        readInformation.mainCols,
+                                    );
+                                }}
                                 className={
                                     readInformation.mainCols === 1
-                                        ? 'side__image-normal'
-                                        : 'side__image-zoom side__image-left'
+                                        ? 'side__page-normal'
+                                        : 'side__page-zoom'
                                 }
-                            />
-                        </Link>
-                        <Link
-                            component="button"
-                            onClick={() => {
-                                onImageClick(
-                                    readInformation.index,
-                                    readInformation.mainCols === 1 ? 3 : 1,
-                                );
-                            }}
-                            className={
-                                readInformation.mainCols === 1
-                                    ? 'main__page-normal'
-                                    : 'main__page-zoom'
-                            }
-                        >
-                            <img
-                                src={readInformation.currentImagePath}
-                                alt={'Currently viewed page'}
+                            >
+                                <img
+                                    src={readInformation.prevLink}
+                                    alt={'Former page'}
+                                    className={
+                                        readInformation.mainCols === 1
+                                            ? 'side__image-normal'
+                                            : 'side__image-zoom side__image-left'
+                                    }
+                                />
+                            </Link>
+                            <Link
+                                component="button"
+                                onClick={() => {
+                                    onImageClick(
+                                        readInformation.index,
+                                        readInformation.mainCols === 1 ? 3 : 1,
+                                    );
+                                }}
                                 className={
                                     readInformation.mainCols === 1
-                                        ? 'main__image-normal'
-                                        : 'main__image-zoom'
+                                        ? 'main__page-normal'
+                                        : 'main__page-zoom'
                                 }
-                            />
-                        </Link>
-                        <Link
+                            >
+                                <img
+                                    src={readInformation.currentImagePath}
+                                    alt={'Currently viewed page'}
+                                    className={
+                                        readInformation.mainCols === 1
+                                            ? 'main__image-normal'
+                                            : 'main__image-zoom'
+                                    }
+                                />
+                            </Link>
+                            <Link
+                                sx={{
+                                    filter: blurFilter,
+                                    opacity: readInformation.nextOpacity,
+                                }}
+                                component="button"
+                                onClick={() => {
+                                    onImageClick(
+                                        readInformation.nextIndex,
+                                        readInformation.mainCols,
+                                    );
+                                }}
+                                className={
+                                    readInformation.mainCols === 1
+                                        ? 'side__page-normal'
+                                        : 'side__page-zoom'
+                                }
+                            >
+                                <img
+                                    src={readInformation.nextLink}
+                                    alt={'Next page'}
+                                    className={
+                                        readInformation.mainCols === 1
+                                            ? 'side__image-normal'
+                                            : 'side__image-zoom  side__image-right'
+                                    }
+                                />
+                            </Link>
+                        </Stack>
+                        <Stack
                             sx={{
-                                filter: blurFilter,
-                                opacity: readInformation.nextOpacity,
+                                width: 1890,
+                                minHeight: 5,
+                                overflow: 'hidden',
                             }}
-                            component="button"
-                            onClick={() => {
-                                onImageClick(
-                                    readInformation.nextIndex,
-                                    readInformation.mainCols,
-                                );
-                            }}
-                            className={
-                                readInformation.mainCols === 1
-                                    ? 'side__page-normal'
-                                    : 'side__page-zoom'
-                            }
+                            direction="row"
+                            justifyContent="space-around"
+                            alignItems="stretch"
+                            spacing={0.5}
                         >
-                            <img
-                                src={readInformation.nextLink}
-                                alt={'Next page'}
-                                className={
-                                    readInformation.mainCols === 1
-                                        ? 'side__image-normal'
-                                        : 'side__image-zoom  side__image-right'
-                                }
-                            />
-                        </Link>
+                            <Typography className="page__counter">
+                                Page {readInformation.prevIndex + 1}
+                            </Typography>
+                            <Typography className="page__counter">
+                                Page {readInformation.index + 1}
+                            </Typography>
+                            <Typography className="page__counter">
+                                Page {readInformation.nextIndex + 1}
+                            </Typography>
+                        </Stack>
                     </Stack>,
                 );
             }
