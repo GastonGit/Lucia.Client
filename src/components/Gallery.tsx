@@ -18,7 +18,7 @@ export default function Gallery(): JSX.Element | null {
     const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
         noSsr: true,
     });
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gallery, setGallery] = useState([]);
     const [maxPageCount, setMaxPageCount] = useState(0);
@@ -122,8 +122,6 @@ export default function Gallery(): JSX.Element | null {
     };
 
     if (error) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         return <div>Error: {error.message}</div>;
     } else if (isLoaded) {
         return (
