@@ -12,11 +12,15 @@ import {
     Typography,
     useMediaQuery,
 } from '@mui/material';
-import { useAppSelector } from '../app/hooks';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import { setMangaInfo } from '../features/reading';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 
 export default function Read(): JSX.Element | null {
+    const dispatch = useAppDispatch();
+    const mangaInfo = useAppSelector((state) => state.reading.mangaInfo);
+
     const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
         noSsr: true,
     });
@@ -26,13 +30,7 @@ export default function Read(): JSX.Element | null {
     const navigate = useNavigate();
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [mangaInfo, setMangaInfo] = useState({
-        author: '',
-        title: '',
-        images: [],
-        tags: [],
-    });
-    const [mangaThumbnails, setMangaThumbnails] = useState([]);
+    const [mangaThumbnails, setMangaThumbnails] = useState<string[]>([]);
     const [readInformation, setReadInformation] = useState({
         index: -1,
         mainCols: -1,
@@ -58,12 +56,14 @@ export default function Read(): JSX.Element | null {
             .then(
                 (result) => {
                     if (result.length !== 0) {
-                        setMangaInfo({
-                            author: result[0].author,
-                            title: result[0].title,
-                            images: result[0].images,
-                            tags: result[0].tags,
-                        });
+                        dispatch(
+                            setMangaInfo({
+                                author: result[0].author,
+                                title: result[0].title,
+                                images: result[0].images,
+                                tags: result[0].tags,
+                            }),
+                        );
                         setMangaThumbnails(result[0].thumbnails);
                         setIsLoaded(true);
                     }
@@ -284,16 +284,16 @@ export default function Read(): JSX.Element | null {
 
     function onImageClick(index: number, mainCols: number) {
         const currentImagePath = mangaInfo.images[index];
-        const updatedThumbnails = [...mangaThumbnails];
+        const updatedThumbnails = [...mangaThumbnails] as string[];
         updatedThumbnails[index] = currentImagePath;
 
         const opacity = '0.25';
 
-        let prevLink = mangaThumbnails[index];
+        let prevLink = mangaThumbnails[index] as string;
         let prevIndex;
         let prevOpacity = '0';
 
-        let nextLink = mangaThumbnails[index];
+        let nextLink = mangaThumbnails[index] as string;
         let nextIndex;
         let nextOpacity = '0';
 
