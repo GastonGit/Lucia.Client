@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import './index.css';
 import Gallery from './components/Gallery';
 import Header from './components/Header';
-import Read from './components/Read';
+import Overview from './components/Overview';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -16,7 +16,7 @@ ReactDOM.render(
                 <Header />
                 <Routes>
                     <Route path="/" element={<Gallery />} />
-                    <Route path="/:id" element={<Read />} />
+                    <Route path="/:id" element={<Overview />} />
                     <Route path="/search" element={<Gallery />} />
                 </Routes>
             </Provider>

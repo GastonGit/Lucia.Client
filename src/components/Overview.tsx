@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/Read.css';
+import '../styles/Overview.css';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import {
     Box,
@@ -17,7 +17,7 @@ import { setMangaInfo } from '../features/reading';
 import StyledTooltip from '../subcomponents/StyledTooltip';
 import ImageListItem from '@mui/material/ImageListItem';
 
-export default function Read(): JSX.Element | null {
+export default function Overview(): JSX.Element | null {
     const dispatch = useAppDispatch();
     const mangaInfo = useAppSelector((state) => state.reading.mangaInfo);
 
