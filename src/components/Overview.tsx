@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/Overview.css';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
+import '../styles/Overview.css';
+import { useAppSelector, useAppDispatch } from '../app/hooks';
+import { setMangaInfo } from '../features/reading';
 import {
     Box,
     Divider,
@@ -10,24 +12,16 @@ import {
     Link,
     Stack,
     Typography,
+    ImageListItem,
     useMediaQuery,
 } from '@mui/material';
-import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setMangaInfo } from '../features/reading';
 import StyledTooltip from '../subcomponents/StyledTooltip';
-import ImageListItem from '@mui/material/ImageListItem';
 
 export default function Overview(): JSX.Element | null {
     const dispatch = useAppDispatch();
     const mangaInfo = useAppSelector((state) => state.reading.mangaInfo);
+    const preloadCount = useAppSelector((state) => state.settings.preloadCount);
 
-    const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
-        noSsr: true,
-    });
-    const screenWidthIsUnder600 = useMediaQuery('(max-width:600px)', {
-        noSsr: true,
-    });
-    const navigate = useNavigate();
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [mangaThumbnails, setMangaThumbnails] = useState<string[]>([]);
@@ -42,13 +36,24 @@ export default function Overview(): JSX.Element | null {
         nextOpacity: '',
         nextIndex: -1,
     });
-    const preloadCount = useAppSelector((state) => state.settings.preloadCount);
     const [currentImage, setCurrentImage] = useState(<div />);
+
+    const navigate = useNavigate();
     const myRef = useRef<HTMLDivElement>(null);
+    const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
+        noSsr: true,
+    });
+    const screenWidthIsUnder600 = useMediaQuery('(max-width:600px)', {
+        noSsr: true,
+    });
 
     const api = process.env.REACT_APP_API_SERVER || '';
     const pathname = useLocation().pathname;
     const id = pathname.substring(pathname.indexOf('/') + 1);
+
+    useEffect(() => {
+        centerView();
+    }, [currentImage]);
 
     useEffect(() => {
         fetch(api + '/manga?id=' + id)
@@ -74,32 +79,6 @@ export default function Overview(): JSX.Element | null {
                 },
             );
     }, []);
-
-    useEffect(() => {
-        centerView();
-    }, [currentImage]);
-
-    function centerView() {
-        if (myRef !== null && myRef.current !== null) {
-            myRef.current.scrollIntoView();
-        }
-    }
-
-    function onTagClick(
-        event:
-            | React.MouseEvent<HTMLSpanElement, MouseEvent>
-            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-        tag: string,
-    ) {
-        event.preventDefault();
-        navigate(
-            '/?' +
-                createSearchParams({
-                    ['search']: tag,
-                    ['page']: '1',
-                }),
-        );
-    }
 
     useEffect(() => {
         const blurFilter = 'blur(4px)';
@@ -281,6 +260,28 @@ export default function Overview(): JSX.Element | null {
             centerView();
         }
     }, [readInformation, screenWidthIsUnder600]);
+
+    function centerView() {
+        if (myRef !== null && myRef.current !== null) {
+            myRef.current.scrollIntoView();
+        }
+    }
+
+    function onTagClick(
+        event:
+            | React.MouseEvent<HTMLSpanElement, MouseEvent>
+            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        tag: string,
+    ) {
+        event.preventDefault();
+        navigate(
+            '/?' +
+                createSearchParams({
+                    ['search']: tag,
+                    ['page']: '1',
+                }),
+        );
+    }
 
     function onImageClick(index: number, mainCols: number) {
         const currentImagePath = mangaInfo.images[index];
