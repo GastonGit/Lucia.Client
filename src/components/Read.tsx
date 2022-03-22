@@ -476,10 +476,15 @@ export default function Read(): JSX.Element | null {
                     >
                         <Grid container spacing={1} columns={28}>
                             {mangaThumbnails.map((image: string, index) => (
-                                <Grid item xs={14 as GridSize} sm={7} md={4}>
+                                <Grid
+                                    item
+                                    xs={14 as GridSize}
+                                    sm={7}
+                                    md={4}
+                                    key={index}
+                                >
                                     <StyledTooltip
                                         title={'Page ' + (index + 1)}
-                                        key={index}
                                     >
                                         <Link
                                             component="button"
