@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import '../styles/Gallery.css';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
 import {
     Stack,
     Link,
@@ -10,36 +9,30 @@ import {
     Grid,
     GridSize,
     Box,
+    ImageListItem,
+    ImageListItemBar,
     useMediaQuery,
 } from '@mui/material';
-import { useSearchParams, useNavigate } from 'react-router-dom';
 
 export default function Gallery(): JSX.Element | null {
-    const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
-        noSsr: true,
-    });
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gallery, setGallery] = useState([]);
     const [maxPageCount, setMaxPageCount] = useState(0);
     const [page, setPage] = useState(1);
+
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
+    const screenWidthIsAbove1920 = useMediaQuery('(min-width:1920px)', {
+        noSsr: true,
+    });
 
-    function onMangaSubmit(
-        event:
-            | React.MouseEvent<HTMLSpanElement, MouseEvent>
-            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-        id: string,
-    ) {
-        event.preventDefault();
-        const url = '/' + id;
-
-        if (event.ctrlKey) {
-            window.open(url, '_blank');
-        } else {
-            navigate(url);
-        }
+    let pageNumber = parseInt(searchParams.get('page') as string);
+    if (Number.isNaN(pageNumber)) {
+        pageNumber = 1;
+    }
+    if (pageNumber !== page) {
+        setPage(pageNumber);
     }
 
     useEffect(() => {
@@ -94,12 +87,20 @@ export default function Gallery(): JSX.Element | null {
         }
     }, [page, searchParams]);
 
-    let pageNumber = parseInt(searchParams.get('page') as string);
-    if (Number.isNaN(pageNumber)) {
-        pageNumber = 1;
-    }
-    if (pageNumber !== page) {
-        setPage(pageNumber);
+    function onMangaSubmit(
+        event:
+            | React.MouseEvent<HTMLSpanElement, MouseEvent>
+            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        id: string,
+    ) {
+        event.preventDefault();
+        const url = '/' + id;
+
+        if (event.ctrlKey) {
+            window.open(url, '_blank');
+        } else {
+            navigate(url);
+        }
     }
 
     const handlePageChange = (
