@@ -48,17 +48,18 @@ code {
     Scrollbar
 */
 ::-webkit-scrollbar {
-  background: var(--quinary--bg-color);
+  width: 10px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-button{
-  background: var(--quaternary--bg-color);
+  background: var(--tertiary-text-color);
 }
 
 ::-webkit-scrollbar-thumb{
-  background: var(--quaternary--bg-color);
+  background: var(--tertiary-text-color);
 }
 
 ::-webkit-scrollbar-corner{
-  background: var(--quaternary--bg-color);
+  background: var(--tertiary-text-color);
 }
