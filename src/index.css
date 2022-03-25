@@ -58,5 +58,6 @@ code {
 }
 
 ::-webkit-scrollbar-thumb{
+  border-radius: 3px;
   background: var(--tertiary-text-color);
 }
