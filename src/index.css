@@ -53,13 +53,10 @@ code {
 }
 
 ::-webkit-scrollbar-button{
-  background: var(--tertiary-text-color);
+  width: 0;
+  height: 0;
 }
 
 ::-webkit-scrollbar-thumb{
-  background: var(--tertiary-text-color);
-}
-
-::-webkit-scrollbar-corner{
   background: var(--tertiary-text-color);
 }
