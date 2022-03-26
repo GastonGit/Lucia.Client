@@ -18,6 +18,7 @@ export interface ReadingState {
         nextOpacity: string;
         nextIndex: number;
     };
+    mangaThumbnails: string[];
 }
 
 const initialState: ReadingState = {
@@ -38,6 +39,7 @@ const initialState: ReadingState = {
         nextOpacity: '',
         nextIndex: -1,
     },
+    mangaThumbnails: [],
 };
 
 const readingSlice = createSlice({
@@ -71,8 +73,12 @@ const readingSlice = createSlice({
         ) {
             state.readInfo = action.payload;
         },
+        setMangaThumbnails(state, action: PayloadAction<string[]>) {
+            state.mangaThumbnails = action.payload;
+        },
     },
 });
 
-export const { setMangaInfo, setReadInfo } = readingSlice.actions;
+export const { setMangaInfo, setReadInfo, setMangaThumbnails } =
+    readingSlice.actions;
 export default readingSlice.reducer;

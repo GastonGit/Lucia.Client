@@ -2,7 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Overview.css';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setMangaInfo, setReadInfo } from '../features/reading';
+import {
+    setMangaInfo,
+    setReadInfo,
+    setMangaThumbnails,
+} from '../features/reading';
 import {
     Box,
     Divider,
@@ -21,11 +25,13 @@ export default function Overview(): JSX.Element | null {
     const dispatch = useAppDispatch();
     const mangaInfo = useAppSelector((state) => state.reading.mangaInfo);
     const readInfo = useAppSelector((state) => state.reading.readInfo);
+    const mangaThumbnails = useAppSelector(
+        (state) => state.reading.mangaThumbnails,
+    );
     const preloadCount = useAppSelector((state) => state.settings.preloadCount);
 
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [mangaThumbnails, setMangaThumbnails] = useState<string[]>([]);
     const [currentImage, setCurrentImage] = useState(<div />);
 
     const navigate = useNavigate();
@@ -59,7 +65,7 @@ export default function Overview(): JSX.Element | null {
                                 tags: result[0].tags,
                             }),
                         );
-                        setMangaThumbnails(result[0].thumbnails);
+                        dispatch(setMangaThumbnails(result[0].thumbnails));
                         setIsLoaded(true);
                     }
                 },
@@ -334,7 +340,7 @@ export default function Overview(): JSX.Element | null {
             }
         }
 
-        setMangaThumbnails(updatedThumbnails);
+        dispatch(setMangaThumbnails(updatedThumbnails));
         dispatch(
             setReadInfo({
                 index: index,
