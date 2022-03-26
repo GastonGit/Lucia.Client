@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createSearchParams, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Overview.css';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setMangaInfo } from '../features/reading';
+import { setMangaInfo, setReadInfo } from '../features/reading';
 import {
     Box,
     Divider,
@@ -20,22 +20,12 @@ import StyledTooltip from '../subcomponents/StyledTooltip';
 export default function Overview(): JSX.Element | null {
     const dispatch = useAppDispatch();
     const mangaInfo = useAppSelector((state) => state.reading.mangaInfo);
+    const readInfo = useAppSelector((state) => state.reading.readInfo);
     const preloadCount = useAppSelector((state) => state.settings.preloadCount);
 
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [mangaThumbnails, setMangaThumbnails] = useState<string[]>([]);
-    const [readInformation, setReadInformation] = useState({
-        index: -1,
-        mainCols: -1,
-        currentImagePath: '',
-        prevLink: '',
-        prevOpacity: '',
-        prevIndex: -1,
-        nextLink: '',
-        nextOpacity: '',
-        nextIndex: -1,
-    });
     const [currentImage, setCurrentImage] = useState(<div />);
 
     const navigate = useNavigate();
@@ -82,7 +72,7 @@ export default function Overview(): JSX.Element | null {
 
     useEffect(() => {
         const blurFilter = 'blur(4px)';
-        if (readInformation.mainCols !== -1) {
+        if (readInfo.mainCols !== -1) {
             if (screenWidthIsUnder600) {
                 setCurrentImage(
                     <Box
@@ -154,26 +144,26 @@ export default function Overview(): JSX.Element | null {
                             <Link
                                 sx={{
                                     filter: blurFilter,
-                                    opacity: readInformation.prevOpacity,
+                                    opacity: readInfo.prevOpacity,
                                 }}
                                 component="button"
                                 onClick={() => {
                                     onImageClick(
-                                        readInformation.prevIndex,
-                                        readInformation.mainCols,
+                                        readInfo.prevIndex,
+                                        readInfo.mainCols,
                                     );
                                 }}
                                 className={
-                                    readInformation.mainCols === 1
+                                    readInfo.mainCols === 1
                                         ? 'side__page-normal'
                                         : 'side__page-zoom'
                                 }
                             >
                                 <img
-                                    src={readInformation.prevLink}
+                                    src={readInfo.prevLink}
                                     alt={'Former page'}
                                     className={
-                                        readInformation.mainCols === 1
+                                        readInfo.mainCols === 1
                                             ? 'side__image-normal'
                                             : 'side__image-zoom side__image-left'
                                     }
@@ -183,21 +173,21 @@ export default function Overview(): JSX.Element | null {
                                 component="button"
                                 onClick={() => {
                                     onImageClick(
-                                        readInformation.index,
-                                        readInformation.mainCols === 1 ? 3 : 1,
+                                        readInfo.index,
+                                        readInfo.mainCols === 1 ? 3 : 1,
                                     );
                                 }}
                                 className={
-                                    readInformation.mainCols === 1
+                                    readInfo.mainCols === 1
                                         ? 'main__page-normal'
                                         : 'main__page-zoom'
                                 }
                             >
                                 <img
-                                    src={readInformation.currentImagePath}
+                                    src={readInfo.currentImagePath}
                                     alt={'Currently viewed page'}
                                     className={
-                                        readInformation.mainCols === 1
+                                        readInfo.mainCols === 1
                                             ? 'main__image-normal'
                                             : 'main__image-zoom'
                                     }
@@ -206,26 +196,26 @@ export default function Overview(): JSX.Element | null {
                             <Link
                                 sx={{
                                     filter: blurFilter,
-                                    opacity: readInformation.nextOpacity,
+                                    opacity: readInfo.nextOpacity,
                                 }}
                                 component="button"
                                 onClick={() => {
                                     onImageClick(
-                                        readInformation.nextIndex,
-                                        readInformation.mainCols,
+                                        readInfo.nextIndex,
+                                        readInfo.mainCols,
                                     );
                                 }}
                                 className={
-                                    readInformation.mainCols === 1
+                                    readInfo.mainCols === 1
                                         ? 'side__page-normal'
                                         : 'side__page-zoom'
                                 }
                             >
                                 <img
-                                    src={readInformation.nextLink}
+                                    src={readInfo.nextLink}
                                     alt={'Next page'}
                                     className={
-                                        readInformation.mainCols === 1
+                                        readInfo.mainCols === 1
                                             ? 'side__image-normal'
                                             : 'side__image-zoom  side__image-right'
                                     }
@@ -244,13 +234,13 @@ export default function Overview(): JSX.Element | null {
                             spacing={0.5}
                         >
                             <Typography className="page__counter">
-                                Page {readInformation.prevIndex + 1}
+                                Page {readInfo.prevIndex + 1}
                             </Typography>
                             <Typography className="page__counter">
-                                Page {readInformation.index + 1}
+                                Page {readInfo.index + 1}
                             </Typography>
                             <Typography className="page__counter">
-                                Page {readInformation.nextIndex + 1}
+                                Page {readInfo.nextIndex + 1}
                             </Typography>
                         </Stack>
                     </Stack>,
@@ -259,7 +249,7 @@ export default function Overview(): JSX.Element | null {
 
             centerView();
         }
-    }, [readInformation, screenWidthIsUnder600]);
+    }, [readInfo, screenWidthIsUnder600]);
 
     function centerView() {
         if (myRef !== null && myRef.current !== null) {
@@ -345,17 +335,19 @@ export default function Overview(): JSX.Element | null {
         }
 
         setMangaThumbnails(updatedThumbnails);
-        setReadInformation({
-            index: index,
-            mainCols: mainCols,
-            currentImagePath: currentImagePath,
-            prevLink: prevLink,
-            prevOpacity: prevOpacity,
-            prevIndex: prevIndex,
-            nextLink: nextLink,
-            nextOpacity: nextOpacity,
-            nextIndex: nextIndex,
-        });
+        dispatch(
+            setReadInfo({
+                index: index,
+                mainCols: mainCols,
+                currentImagePath: currentImagePath,
+                prevLink: prevLink,
+                prevOpacity: prevOpacity,
+                prevIndex: prevIndex,
+                nextLink: nextLink,
+                nextOpacity: nextOpacity,
+                nextIndex: nextIndex,
+            }),
+        );
     }
 
     if (error) {
