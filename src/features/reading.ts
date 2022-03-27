@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import React from 'react';
 
 export interface ReadingState {
     mangaInfo: {
@@ -19,6 +20,7 @@ export interface ReadingState {
         nextIndex: number;
     };
     mangaThumbnails: string[];
+    currentImage: JSX.Element;
 }
 
 const initialState: ReadingState = {
@@ -40,6 +42,7 @@ const initialState: ReadingState = {
         nextIndex: -1,
     },
     mangaThumbnails: [],
+    currentImage: React.createElement('div'),
 };
 
 const readingSlice = createSlice({
@@ -76,9 +79,16 @@ const readingSlice = createSlice({
         setMangaThumbnails(state, action: PayloadAction<string[]>) {
             state.mangaThumbnails = action.payload;
         },
+        setCurrentImage(state, action: PayloadAction<JSX.Element>) {
+            state.currentImage = action.payload;
+        },
     },
 });
 
-export const { setMangaInfo, setReadInfo, setMangaThumbnails } =
-    readingSlice.actions;
+export const {
+    setMangaInfo,
+    setReadInfo,
+    setMangaThumbnails,
+    setCurrentImage,
+} = readingSlice.actions;
 export default readingSlice.reducer;

@@ -6,6 +6,7 @@ import {
     setMangaInfo,
     setReadInfo,
     setMangaThumbnails,
+    setCurrentImage,
 } from '../features/reading';
 import {
     Box,
@@ -28,11 +29,11 @@ export default function Overview(): JSX.Element | null {
     const mangaThumbnails = useAppSelector(
         (state) => state.reading.mangaThumbnails,
     );
+    const currentImage = useAppSelector((state) => state.reading.currentImage);
     const preloadCount = useAppSelector((state) => state.settings.preloadCount);
 
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [currentImage, setCurrentImage] = useState(<div />);
 
     const navigate = useNavigate();
     const myRef = useRef<HTMLDivElement>(null);
@@ -80,176 +81,183 @@ export default function Overview(): JSX.Element | null {
         const blurFilter = 'blur(4px)';
         if (readInfo.mainCols !== -1) {
             if (screenWidthIsUnder600) {
-                setCurrentImage(
-                    <Box
-                        sx={{
-                            maxWidth: '100vw',
-                            overflow: 'hidden',
-                            backgroundColor: 'var(--quinary--bg-color)',
-                        }}
-                    >
-                        <Grid container spacing={0.25} columns={28}>
-                            {mangaInfo.images.map((image: string, index) => (
-                                <Grid item xs={28 as GridSize}>
-                                    <StyledTooltip
-                                        title={'Page ' + (index + 1)}
-                                        key={index}
-                                    >
-                                        <Link
-                                            component="button"
-                                            onClick={() => {
-                                                onImageClick(index, 1);
-                                            }}
-                                            sx={{
-                                                width: '100%',
-                                                height: '100%',
-                                                backgroundColor:
-                                                    'var(--quaternary--bg-color)',
-                                            }}
-                                        >
-                                            <ImageListItem
-                                                sx={{
-                                                    width: '100%',
-                                                    height: '100% !important',
-                                                }}
+                dispatch(
+                    setCurrentImage(
+                        <Box
+                            sx={{
+                                maxWidth: '100vw',
+                                overflow: 'hidden',
+                                backgroundColor: 'var(--quinary--bg-color)',
+                            }}
+                        >
+                            <Grid container spacing={0.25} columns={28}>
+                                {mangaInfo.images.map(
+                                    (image: string, index) => (
+                                        <Grid item xs={28 as GridSize}>
+                                            <StyledTooltip
+                                                title={'Page ' + (index + 1)}
+                                                key={index}
                                             >
-                                                <img
-                                                    src={image}
-                                                    alt={
-                                                        'Image for ' +
-                                                        mangaInfo.title
-                                                    }
-                                                    className="gallery__image"
-                                                />
-                                            </ImageListItem>
-                                        </Link>
-                                    </StyledTooltip>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Box>,
+                                                <Link
+                                                    component="button"
+                                                    onClick={() => {
+                                                        onImageClick(index, 1);
+                                                    }}
+                                                    sx={{
+                                                        width: '100%',
+                                                        height: '100%',
+                                                        backgroundColor:
+                                                            'var(--quaternary--bg-color)',
+                                                    }}
+                                                >
+                                                    <ImageListItem
+                                                        sx={{
+                                                            width: '100%',
+                                                            height: '100% !important',
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={image}
+                                                            alt={
+                                                                'Image for ' +
+                                                                mangaInfo.title
+                                                            }
+                                                            className="gallery__image"
+                                                        />
+                                                    </ImageListItem>
+                                                </Link>
+                                            </StyledTooltip>
+                                        </Grid>
+                                    ),
+                                )}
+                            </Grid>
+                        </Box>,
+                    ),
                 );
             } else {
-                setCurrentImage(
-                    <Stack direction="column">
-                        <Stack
-                            sx={{
-                                width: 1890,
-                                minHeight: 926,
-                                borderStyle: 'solid',
-                                borderWidth: '5px',
-                                borderColor: 'var(--quaternary--bg-color)',
-                                backgroundColor: 'var(--quaternary--bg-color)',
-                                overflow: 'hidden',
-                            }}
-                            direction="row"
-                            justifyContent="space-around"
-                            alignItems="stretch"
-                            spacing={0.5}
-                        >
-                            <Link
+                dispatch(
+                    setCurrentImage(
+                        <Stack direction="column">
+                            <Stack
                                 sx={{
-                                    filter: blurFilter,
-                                    opacity: readInfo.prevOpacity,
+                                    width: 1890,
+                                    minHeight: 926,
+                                    borderStyle: 'solid',
+                                    borderWidth: '5px',
+                                    borderColor: 'var(--quaternary--bg-color)',
+                                    backgroundColor:
+                                        'var(--quaternary--bg-color)',
+                                    overflow: 'hidden',
                                 }}
-                                component="button"
-                                onClick={() => {
-                                    onImageClick(
-                                        readInfo.prevIndex,
-                                        readInfo.mainCols,
-                                    );
-                                }}
-                                className={
-                                    readInfo.mainCols === 1
-                                        ? 'side__page-normal'
-                                        : 'side__page-zoom'
-                                }
+                                direction="row"
+                                justifyContent="space-around"
+                                alignItems="stretch"
+                                spacing={0.5}
                             >
-                                <img
-                                    src={readInfo.prevLink}
-                                    alt={'Former page'}
+                                <Link
+                                    sx={{
+                                        filter: blurFilter,
+                                        opacity: readInfo.prevOpacity,
+                                    }}
+                                    component="button"
+                                    onClick={() => {
+                                        onImageClick(
+                                            readInfo.prevIndex,
+                                            readInfo.mainCols,
+                                        );
+                                    }}
                                     className={
                                         readInfo.mainCols === 1
-                                            ? 'side__image-normal'
-                                            : 'side__image-zoom side__image-left'
+                                            ? 'side__page-normal'
+                                            : 'side__page-zoom'
                                     }
-                                />
-                            </Link>
-                            <Link
-                                component="button"
-                                onClick={() => {
-                                    onImageClick(
-                                        readInfo.index,
-                                        readInfo.mainCols === 1 ? 3 : 1,
-                                    );
-                                }}
-                                className={
-                                    readInfo.mainCols === 1
-                                        ? 'main__page-normal'
-                                        : 'main__page-zoom'
-                                }
-                            >
-                                <img
-                                    src={readInfo.currentImagePath}
-                                    alt={'Currently viewed page'}
+                                >
+                                    <img
+                                        src={readInfo.prevLink}
+                                        alt={'Former page'}
+                                        className={
+                                            readInfo.mainCols === 1
+                                                ? 'side__image-normal'
+                                                : 'side__image-zoom side__image-left'
+                                        }
+                                    />
+                                </Link>
+                                <Link
+                                    component="button"
+                                    onClick={() => {
+                                        onImageClick(
+                                            readInfo.index,
+                                            readInfo.mainCols === 1 ? 3 : 1,
+                                        );
+                                    }}
                                     className={
                                         readInfo.mainCols === 1
-                                            ? 'main__image-normal'
-                                            : 'main__image-zoom'
+                                            ? 'main__page-normal'
+                                            : 'main__page-zoom'
                                     }
-                                />
-                            </Link>
-                            <Link
+                                >
+                                    <img
+                                        src={readInfo.currentImagePath}
+                                        alt={'Currently viewed page'}
+                                        className={
+                                            readInfo.mainCols === 1
+                                                ? 'main__image-normal'
+                                                : 'main__image-zoom'
+                                        }
+                                    />
+                                </Link>
+                                <Link
+                                    sx={{
+                                        filter: blurFilter,
+                                        opacity: readInfo.nextOpacity,
+                                    }}
+                                    component="button"
+                                    onClick={() => {
+                                        onImageClick(
+                                            readInfo.nextIndex,
+                                            readInfo.mainCols,
+                                        );
+                                    }}
+                                    className={
+                                        readInfo.mainCols === 1
+                                            ? 'side__page-normal'
+                                            : 'side__page-zoom'
+                                    }
+                                >
+                                    <img
+                                        src={readInfo.nextLink}
+                                        alt={'Next page'}
+                                        className={
+                                            readInfo.mainCols === 1
+                                                ? 'side__image-normal'
+                                                : 'side__image-zoom  side__image-right'
+                                        }
+                                    />
+                                </Link>
+                            </Stack>
+                            <Stack
                                 sx={{
-                                    filter: blurFilter,
-                                    opacity: readInfo.nextOpacity,
+                                    width: 1890,
+                                    minHeight: 5,
+                                    overflow: 'hidden',
                                 }}
-                                component="button"
-                                onClick={() => {
-                                    onImageClick(
-                                        readInfo.nextIndex,
-                                        readInfo.mainCols,
-                                    );
-                                }}
-                                className={
-                                    readInfo.mainCols === 1
-                                        ? 'side__page-normal'
-                                        : 'side__page-zoom'
-                                }
+                                direction="row"
+                                justifyContent="space-around"
+                                alignItems="stretch"
+                                spacing={0.5}
                             >
-                                <img
-                                    src={readInfo.nextLink}
-                                    alt={'Next page'}
-                                    className={
-                                        readInfo.mainCols === 1
-                                            ? 'side__image-normal'
-                                            : 'side__image-zoom  side__image-right'
-                                    }
-                                />
-                            </Link>
-                        </Stack>
-                        <Stack
-                            sx={{
-                                width: 1890,
-                                minHeight: 5,
-                                overflow: 'hidden',
-                            }}
-                            direction="row"
-                            justifyContent="space-around"
-                            alignItems="stretch"
-                            spacing={0.5}
-                        >
-                            <Typography className="page__counter">
-                                Page {readInfo.prevIndex + 1}
-                            </Typography>
-                            <Typography className="page__counter">
-                                Page {readInfo.index + 1}
-                            </Typography>
-                            <Typography className="page__counter">
-                                Page {readInfo.nextIndex + 1}
-                            </Typography>
-                        </Stack>
-                    </Stack>,
+                                <Typography className="page__counter">
+                                    Page {readInfo.prevIndex + 1}
+                                </Typography>
+                                <Typography className="page__counter">
+                                    Page {readInfo.index + 1}
+                                </Typography>
+                                <Typography className="page__counter">
+                                    Page {readInfo.nextIndex + 1}
+                                </Typography>
+                            </Stack>
+                        </Stack>,
+                    ),
                 );
             }
 
