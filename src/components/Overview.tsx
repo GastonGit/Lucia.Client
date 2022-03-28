@@ -67,6 +67,20 @@ export default function Overview(): JSX.Element | null {
                             }),
                         );
                         dispatch(setMangaThumbnails(result[0].thumbnails));
+                        dispatch(
+                            setReadInfo({
+                                index: -1,
+                                mainCols: -1,
+                                currentImagePath: '',
+                                prevLink: '',
+                                prevOpacity: '',
+                                prevIndex: -1,
+                                nextLink: '',
+                                nextOpacity: '',
+                                nextIndex: -1,
+                            }),
+                        );
+                        dispatch(setCurrentImage(<div />));
                         setIsLoaded(true);
                     }
                 },
@@ -347,7 +361,6 @@ export default function Overview(): JSX.Element | null {
                 }
             }
         }
-
         dispatch(setMangaThumbnails(updatedThumbnails));
         dispatch(
             setReadInfo({
