@@ -4,9 +4,8 @@ import '../styles/Overview.css';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import {
     setMangaInfo,
-    setReadInfo,
     setMangaThumbnails,
-    setCurrentImage,
+    setCurrentPageIndex,
 } from '../features/reading';
 import {
     Box,
@@ -21,6 +20,7 @@ import {
     useMediaQuery,
 } from '@mui/material';
 import StyledTooltip from '../subcomponents/StyledTooltip';
+import Read from '../subcomponents/Read';
 
 export default function Overview(): JSX.Element | null {
     const dispatch = useAppDispatch();
@@ -29,11 +29,10 @@ export default function Overview(): JSX.Element | null {
     const mangaThumbnails = useAppSelector(
         (state) => state.reading.mangaThumbnails,
     );
-    const currentImage = useAppSelector((state) => state.reading.currentImage);
-    const preloadCount = useAppSelector((state) => state.settings.preloadCount);
 
     const [error, setError] = useState<TypeError | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [readActive, setReadActive] = useState(false);
 
     const navigate = useNavigate();
     const myRef = useRef<HTMLDivElement>(null);
@@ -47,10 +46,6 @@ export default function Overview(): JSX.Element | null {
     const api = process.env.REACT_APP_API_SERVER || '';
     const pathname = useLocation().pathname;
     const id = pathname.substring(pathname.indexOf('/') + 1);
-
-    useEffect(() => {
-        centerView();
-    }, [currentImage]);
 
     useEffect(() => {
         fetch(api + '/manga?id=' + id)
@@ -67,20 +62,6 @@ export default function Overview(): JSX.Element | null {
                             }),
                         );
                         dispatch(setMangaThumbnails(result[0].thumbnails));
-                        dispatch(
-                            setReadInfo({
-                                index: -1,
-                                mainCols: -1,
-                                currentImagePath: '',
-                                prevLink: '',
-                                prevOpacity: '',
-                                prevIndex: -1,
-                                nextLink: '',
-                                nextOpacity: '',
-                                nextIndex: -1,
-                            }),
-                        );
-                        dispatch(setCurrentImage(<div />));
                         setIsLoaded(true);
                     }
                 },
@@ -92,191 +73,7 @@ export default function Overview(): JSX.Element | null {
     }, []);
 
     useEffect(() => {
-        const blurFilter = 'blur(4px)';
-        if (readInfo.mainCols !== -1) {
-            if (screenWidthIsUnder600) {
-                dispatch(
-                    setCurrentImage(
-                        <Box
-                            sx={{
-                                maxWidth: '100vw',
-                                overflow: 'hidden',
-                                backgroundColor: 'var(--quinary--bg-color)',
-                            }}
-                        >
-                            <Grid container spacing={0.25} columns={28}>
-                                {mangaInfo.images.map(
-                                    (image: string, index) => (
-                                        <Grid item xs={28 as GridSize}>
-                                            <StyledTooltip
-                                                title={'Page ' + (index + 1)}
-                                                key={index}
-                                            >
-                                                <Link
-                                                    component="button"
-                                                    onClick={() => {
-                                                        onImageClick(index, 1);
-                                                    }}
-                                                    sx={{
-                                                        width: '100%',
-                                                        height: '100%',
-                                                        backgroundColor:
-                                                            'var(--quaternary--bg-color)',
-                                                    }}
-                                                >
-                                                    <ImageListItem
-                                                        sx={{
-                                                            width: '100%',
-                                                            height: '100% !important',
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={image}
-                                                            alt={
-                                                                'Image for ' +
-                                                                mangaInfo.title
-                                                            }
-                                                            className="gallery__image"
-                                                        />
-                                                    </ImageListItem>
-                                                </Link>
-                                            </StyledTooltip>
-                                        </Grid>
-                                    ),
-                                )}
-                            </Grid>
-                        </Box>,
-                    ),
-                );
-            } else {
-                dispatch(
-                    setCurrentImage(
-                        <Stack direction="column">
-                            <Stack
-                                sx={{
-                                    width: 1890,
-                                    minHeight: 926,
-                                    borderStyle: 'solid',
-                                    borderWidth: '5px',
-                                    borderColor: 'var(--quaternary--bg-color)',
-                                    backgroundColor:
-                                        'var(--quaternary--bg-color)',
-                                    overflow: 'hidden',
-                                }}
-                                direction="row"
-                                justifyContent="space-around"
-                                alignItems="stretch"
-                                spacing={0.5}
-                            >
-                                <Link
-                                    sx={{
-                                        filter: blurFilter,
-                                        opacity: readInfo.prevOpacity,
-                                    }}
-                                    component="button"
-                                    onClick={() => {
-                                        onImageClick(
-                                            readInfo.prevIndex,
-                                            readInfo.mainCols,
-                                        );
-                                    }}
-                                    className={
-                                        readInfo.mainCols === 1
-                                            ? 'side__page-normal'
-                                            : 'side__page-zoom'
-                                    }
-                                >
-                                    <img
-                                        src={readInfo.prevLink}
-                                        alt={'Former page'}
-                                        className={
-                                            readInfo.mainCols === 1
-                                                ? 'side__image-normal'
-                                                : 'side__image-zoom side__image-left'
-                                        }
-                                    />
-                                </Link>
-                                <Link
-                                    component="button"
-                                    onClick={() => {
-                                        onImageClick(
-                                            readInfo.index,
-                                            readInfo.mainCols === 1 ? 3 : 1,
-                                        );
-                                    }}
-                                    className={
-                                        readInfo.mainCols === 1
-                                            ? 'main__page-normal'
-                                            : 'main__page-zoom'
-                                    }
-                                >
-                                    <img
-                                        src={readInfo.currentImagePath}
-                                        alt={'Currently viewed page'}
-                                        className={
-                                            readInfo.mainCols === 1
-                                                ? 'main__image-normal'
-                                                : 'main__image-zoom'
-                                        }
-                                    />
-                                </Link>
-                                <Link
-                                    sx={{
-                                        filter: blurFilter,
-                                        opacity: readInfo.nextOpacity,
-                                    }}
-                                    component="button"
-                                    onClick={() => {
-                                        onImageClick(
-                                            readInfo.nextIndex,
-                                            readInfo.mainCols,
-                                        );
-                                    }}
-                                    className={
-                                        readInfo.mainCols === 1
-                                            ? 'side__page-normal'
-                                            : 'side__page-zoom'
-                                    }
-                                >
-                                    <img
-                                        src={readInfo.nextLink}
-                                        alt={'Next page'}
-                                        className={
-                                            readInfo.mainCols === 1
-                                                ? 'side__image-normal'
-                                                : 'side__image-zoom  side__image-right'
-                                        }
-                                    />
-                                </Link>
-                            </Stack>
-                            <Stack
-                                sx={{
-                                    width: 1890,
-                                    minHeight: 5,
-                                    overflow: 'hidden',
-                                }}
-                                direction="row"
-                                justifyContent="space-around"
-                                alignItems="stretch"
-                                spacing={0.5}
-                            >
-                                <Typography className="page__counter">
-                                    Page {readInfo.prevIndex + 1}
-                                </Typography>
-                                <Typography className="page__counter">
-                                    Page {readInfo.index + 1}
-                                </Typography>
-                                <Typography className="page__counter">
-                                    Page {readInfo.nextIndex + 1}
-                                </Typography>
-                            </Stack>
-                        </Stack>,
-                    ),
-                );
-            }
-
-            centerView();
-        }
+        centerView();
     }, [readInfo, screenWidthIsUnder600]);
 
     function centerView() {
@@ -301,80 +98,8 @@ export default function Overview(): JSX.Element | null {
         );
     }
 
-    function onImageClick(index: number, mainCols: number) {
-        const currentImagePath = mangaInfo.images[index];
-        const updatedThumbnails = [...mangaThumbnails] as string[];
-        updatedThumbnails[index] = currentImagePath;
-
-        const opacity = '0.25';
-
-        let prevLink = mangaThumbnails[index] as string;
-        let prevIndex;
-        let prevOpacity = '0';
-
-        let nextLink = mangaThumbnails[index] as string;
-        let nextIndex;
-        let nextOpacity = '0';
-
-        if (index <= 0) {
-            prevIndex = mangaThumbnails.length - 1;
-        } else {
-            prevIndex = index - 1;
-            prevOpacity = opacity;
-        }
-
-        if (preloadCount.previous <= 0) {
-            prevLink = mangaThumbnails[prevIndex];
-        } else {
-            for (let i = 0; i < preloadCount.previous; i++) {
-                if (i === 0) {
-                    prevLink = mangaInfo.images[prevIndex];
-                    updatedThumbnails[prevIndex] = mangaInfo.images[prevIndex];
-                } else if (prevIndex - i >= 0) {
-                    updatedThumbnails[prevIndex - i] =
-                        mangaInfo.images[prevIndex - i];
-                } else {
-                    break;
-                }
-            }
-        }
-
-        if (index + 1 === mangaInfo.images.length) {
-            nextIndex = 0;
-        } else {
-            nextIndex = index + 1;
-            nextOpacity = opacity;
-        }
-
-        if (preloadCount.next <= 0) {
-            nextLink = mangaThumbnails[nextIndex];
-        } else {
-            for (let i = 0; i < preloadCount.next; i++) {
-                if (i === 0) {
-                    nextLink = mangaInfo.images[nextIndex];
-                    updatedThumbnails[nextIndex] = mangaInfo.images[nextIndex];
-                } else if (nextIndex + i < mangaInfo.images.length) {
-                    updatedThumbnails[nextIndex + i] =
-                        mangaInfo.images[nextIndex + i];
-                } else {
-                    break;
-                }
-            }
-        }
-        dispatch(setMangaThumbnails(updatedThumbnails));
-        dispatch(
-            setReadInfo({
-                index: index,
-                mainCols: mainCols,
-                currentImagePath: currentImagePath,
-                prevLink: prevLink,
-                prevOpacity: prevOpacity,
-                prevIndex: prevIndex,
-                nextLink: nextLink,
-                nextOpacity: nextOpacity,
-                nextIndex: nextIndex,
-            }),
-        );
+    function onImageClick(index: number) {
+        dispatch(setCurrentPageIndex(index));
     }
 
     if (error) {
@@ -479,7 +204,7 @@ export default function Overview(): JSX.Element | null {
                             </Stack>
                         </Grid>
                     </Grid>
-                    <div ref={myRef}>{currentImage}</div>
+                    <div ref={myRef}>{readActive && <Read />}</div>
                     <Box
                         sx={{
                             maxWidth: 1700,
@@ -509,7 +234,10 @@ export default function Overview(): JSX.Element | null {
                                         <Link
                                             component="button"
                                             onClick={() => {
-                                                onImageClick(index, 1);
+                                                onImageClick(index);
+                                                if (!readActive) {
+                                                    setReadActive(true);
+                                                }
                                             }}
                                             sx={{
                                                 width: '100%',
