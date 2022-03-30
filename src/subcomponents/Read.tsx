@@ -27,19 +27,23 @@ export default function Read(): JSX.Element {
         const updatedThumbnails = [...mangaThumbnails] as string[];
         updatedThumbnails[index] = mangaInfo.images[index];
 
-        const opacity = '0.25';
+        const adjacentOpacity = '0.25';
+        const hiddenOpacity = '0';
 
-        let prevIndex;
-        let prevOpacity = '0';
+        let prevIndex = index - 1;
+        let prevOpacity = adjacentOpacity;
 
-        let nextIndex;
-        let nextOpacity = '0';
+        let nextIndex = index + 1;
+        let nextOpacity = adjacentOpacity;
 
         if (index <= 0) {
             prevIndex = mangaThumbnails.length - 1;
-        } else {
-            prevIndex = index - 1;
-            prevOpacity = opacity;
+            prevOpacity = hiddenOpacity;
+        }
+
+        if (index + 1 === mangaInfo.images.length) {
+            nextIndex = 0;
+            nextOpacity = hiddenOpacity;
         }
 
         if (preloadCount.previous > 0) {
@@ -53,13 +57,6 @@ export default function Read(): JSX.Element {
                     break;
                 }
             }
-        }
-
-        if (index + 1 === mangaInfo.images.length) {
-            nextIndex = 0;
-        } else {
-            nextIndex = index + 1;
-            nextOpacity = opacity;
         }
 
         if (preloadCount.next > 0) {
