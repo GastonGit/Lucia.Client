@@ -41,7 +41,7 @@ export default function Read(): JSX.Element {
             prevOpacity = hiddenOpacity;
         }
 
-        if (index + 1 === mangaInfo.images.length) {
+        if (index + 1 >= mangaInfo.images.length) {
             nextIndex = 0;
             nextOpacity = hiddenOpacity;
         }
