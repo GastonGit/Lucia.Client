@@ -24,17 +24,14 @@ export default function Read(): JSX.Element {
     }, [currentPageIndex]);
 
     function updatePage(index: number, mainCols: number) {
-        const currentImagePath = mangaInfo.images[index];
         const updatedThumbnails = [...mangaThumbnails] as string[];
-        updatedThumbnails[index] = currentImagePath;
+        updatedThumbnails[index] = mangaInfo.images[index];
 
         const opacity = '0.25';
 
-        let prevLink = mangaThumbnails[index] as string;
         let prevIndex;
         let prevOpacity = '0';
 
-        let nextLink = mangaThumbnails[index] as string;
         let nextIndex;
         let nextOpacity = '0';
 
@@ -45,12 +42,9 @@ export default function Read(): JSX.Element {
             prevOpacity = opacity;
         }
 
-        if (preloadCount.previous <= 0) {
-            prevLink = mangaThumbnails[prevIndex];
-        } else {
+        if (preloadCount.previous > 0) {
             for (let i = 0; i < preloadCount.previous; i++) {
                 if (i === 0) {
-                    prevLink = mangaInfo.images[prevIndex];
                     updatedThumbnails[prevIndex] = mangaInfo.images[prevIndex];
                 } else if (prevIndex - i >= 0) {
                     updatedThumbnails[prevIndex - i] =
@@ -68,12 +62,9 @@ export default function Read(): JSX.Element {
             nextOpacity = opacity;
         }
 
-        if (preloadCount.next <= 0) {
-            nextLink = mangaThumbnails[nextIndex];
-        } else {
+        if (preloadCount.next > 0) {
             for (let i = 0; i < preloadCount.next; i++) {
                 if (i === 0) {
-                    nextLink = mangaInfo.images[nextIndex];
                     updatedThumbnails[nextIndex] = mangaInfo.images[nextIndex];
                 } else if (nextIndex + i < mangaInfo.images.length) {
                     updatedThumbnails[nextIndex + i] =
@@ -83,16 +74,14 @@ export default function Read(): JSX.Element {
                 }
             }
         }
+
         dispatch(setMangaThumbnails(updatedThumbnails));
         dispatch(
             setReadInfo({
                 index: index,
                 mainCols: mainCols,
-                currentImagePath: currentImagePath,
-                prevLink: prevLink,
                 prevOpacity: prevOpacity,
                 prevIndex: prevIndex,
-                nextLink: nextLink,
                 nextOpacity: nextOpacity,
                 nextIndex: nextIndex,
             }),
@@ -103,7 +92,7 @@ export default function Read(): JSX.Element {
             img.onload = () => {
                 setInitLoadComplete(true);
             };
-            img.src = currentImagePath;
+            img.src = mangaInfo.images[index];
         }
     }
 
@@ -141,7 +130,7 @@ export default function Read(): JSX.Element {
                 >
                     {initLoadComplete && (
                         <img
-                            src={readInfo.prevLink}
+                            src={mangaThumbnails[readInfo.prevIndex]}
                             alt={'Former page'}
                             className={
                                 readInfo.mainCols === 1
@@ -167,7 +156,7 @@ export default function Read(): JSX.Element {
                 >
                     {initLoadComplete && (
                         <img
-                            src={readInfo.currentImagePath}
+                            src={mangaInfo.images[readInfo.index]}
                             alt={'Currently viewed page'}
                             className={
                                 readInfo.mainCols === 1
@@ -194,7 +183,7 @@ export default function Read(): JSX.Element {
                 >
                     {initLoadComplete && (
                         <img
-                            src={readInfo.nextLink}
+                            src={mangaThumbnails[readInfo.nextIndex]}
                             alt={'Next page'}
                             className={
                                 readInfo.mainCols === 1

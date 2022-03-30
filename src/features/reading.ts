@@ -10,11 +10,8 @@ export interface ReadingState {
     readInfo: {
         index: number;
         mainCols: number;
-        currentImagePath: string;
-        prevLink: string;
         prevOpacity: string;
         prevIndex: number;
-        nextLink: string;
         nextOpacity: string;
         nextIndex: number;
     };
@@ -32,11 +29,8 @@ const initialState: ReadingState = {
     readInfo: {
         index: -1,
         mainCols: -1,
-        currentImagePath: '',
-        prevLink: '',
         prevOpacity: '',
         prevIndex: -1,
-        nextLink: '',
         nextOpacity: '',
         nextIndex: -1,
     },
@@ -64,11 +58,8 @@ const readingSlice = createSlice({
             action: PayloadAction<{
                 index: number;
                 mainCols: number;
-                currentImagePath: string;
-                prevLink: string;
                 prevOpacity: string;
                 prevIndex: number;
-                nextLink: string;
                 nextOpacity: string;
                 nextIndex: number;
             }>,
