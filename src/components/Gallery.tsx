@@ -157,6 +157,7 @@ export default function Gallery(): JSX.Element | null {
                                 }) => (
                                     <Grid
                                         item
+                                        key={item.id}
                                         xs={14 as GridSize}
                                         sm={7}
                                         md={4}
@@ -168,7 +169,6 @@ export default function Gallery(): JSX.Element | null {
                                                     'var(--quaternary--bg-color)',
                                             }}
                                             href={'/' + item.id}
-                                            key={item.id}
                                             onClick={(event) => {
                                                 onMangaSubmit(event, item.id);
                                             }}
