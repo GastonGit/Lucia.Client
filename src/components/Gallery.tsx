@@ -12,6 +12,7 @@ import {
     ImageListItem,
     ImageListItemBar,
     useMediaQuery,
+    Typography,
 } from '@mui/material';
 
 export default function Gallery(): JSX.Element | null {
@@ -127,93 +128,112 @@ export default function Gallery(): JSX.Element | null {
     } else if (isLoaded) {
         return (
             <Fade in={true} timeout={250}>
-                <Stack
-                    direction="column"
-                    alignItems="center"
-                    spacing={2}
-                    mt={2}
-                    mb={2}
-                >
-                    <Box
-                        sx={{
-                            maxWidth: 1700,
-                            minWidth: screenWidthIsAbove1920
-                                ? 1700
-                                : (1700 / 1920) * 100 + '%',
-                            overflow: 'hidden',
-                            borderStyle: 'solid',
-                            borderRadius: '25px',
-                            borderWidth: '5px',
-                            borderColor: 'var(--quinary--bg-color)',
-                            backgroundColor: 'var(--quinary--bg-color)',
-                        }}
-                    >
-                        <Grid container spacing={1} columns={28}>
-                            {gallery.map(
-                                (item: {
-                                    thumbnail: string;
-                                    title: string;
-                                    id: string;
-                                }) => (
-                                    <Grid
-                                        item
-                                        key={item.id}
-                                        xs={14 as GridSize}
-                                        sm={7}
-                                        md={4}
-                                    >
-                                        <Link
-                                            sx={{
-                                                width: '100%',
-                                                backgroundColor:
-                                                    'var(--quaternary--bg-color)',
-                                            }}
-                                            href={'/' + item.id}
-                                            onClick={(event) => {
-                                                onMangaSubmit(event, item.id);
-                                            }}
-                                        >
-                                            <ImageListItem
-                                                sx={{ width: '100%' }}
+                <div>
+                    {gallery.length > 0 && (
+                        <Stack
+                            direction="column"
+                            alignItems="center"
+                            spacing={2}
+                            mt={2}
+                            mb={2}
+                        >
+                            <Box
+                                sx={{
+                                    maxWidth: 1700,
+                                    minWidth: screenWidthIsAbove1920
+                                        ? 1700
+                                        : (1700 / 1920) * 100 + '%',
+                                    overflow: 'hidden',
+                                    borderStyle: 'solid',
+                                    borderRadius: '25px',
+                                    borderWidth: '5px',
+                                    borderColor: 'var(--quinary--bg-color)',
+                                    backgroundColor: 'var(--quinary--bg-color)',
+                                }}
+                            >
+                                <Grid container spacing={1} columns={28}>
+                                    {gallery.map(
+                                        (item: {
+                                            thumbnail: string;
+                                            title: string;
+                                            id: string;
+                                        }) => (
+                                            <Grid
+                                                item
+                                                key={item.id}
+                                                xs={14 as GridSize}
+                                                sm={7}
+                                                md={4}
                                             >
-                                                <ImageListItemBar
-                                                    title={item.title}
+                                                <Link
                                                     sx={{
-                                                        opacity: 0.96,
-                                                        color: 'var(--quinary--bg-color)',
+                                                        width: '100%',
                                                         backgroundColor:
                                                             'var(--quaternary--bg-color)',
                                                     }}
-                                                />
-                                                <img
-                                                    src={item.thumbnail}
-                                                    alt={
-                                                        'Thumbnail for ' +
-                                                        item.title
-                                                    }
-                                                />
-                                            </ImageListItem>
-                                        </Link>
-                                    </Grid>
-                                ),
-                            )}
-                        </Grid>
-                    </Box>
-                    <Stack
-                        spacing={2}
-                        sx={{
-                            backgroundColor: 'var(--quinary--bg-color)',
-                        }}
-                    >
-                        <Pagination
-                            count={maxPageCount}
-                            shape="rounded"
-                            size="large"
-                            page={page}
-                            onChange={handlePageChange}
-                        />
-                    </Stack>
-                </Stack>
+                                                    href={'/' + item.id}
+                                                    onClick={(event) => {
+                                                        onMangaSubmit(
+                                                            event,
+                                                            item.id,
+                                                        );
+                                                    }}
+                                                >
+                                                    <ImageListItem
+                                                        sx={{ width: '100%' }}
+                                                    >
+                                                        <ImageListItemBar
+                                                            title={item.title}
+                                                            sx={{
+                                                                opacity: 0.96,
+                                                                color: 'var(--quinary--bg-color)',
+                                                                backgroundColor:
+                                                                    'var(--quaternary--bg-color)',
+                                                            }}
+                                                        />
+                                                        <img
+                                                            src={item.thumbnail}
+                                                            alt={
+                                                                'Thumbnail for ' +
+                                                                item.title
+                                                            }
+                                                        />
+                                                    </ImageListItem>
+                                                </Link>
+                                            </Grid>
+                                        ),
+                                    )}
+                                </Grid>
+                            </Box>
+                            <Stack
+                                spacing={2}
+                                sx={{
+                                    backgroundColor: 'var(--quinary--bg-color)',
+                                }}
+                            >
+                                <Pagination
+                                    count={maxPageCount}
+                                    shape="rounded"
+                                    size="large"
+                                    page={page}
+                                    onChange={handlePageChange}
+                                />
+                            </Stack>
+                        </Stack>
+                    )}
+                    {gallery.length === 0 && (
+                        <Typography
+                            sx={{
+                                paddingTop: 5,
+                                color: 'var(--secondary-text-color)',
+                            }}
+                            align="center"
+                            variant="h3"
+                        >
+                            Nothing here :(
+                        </Typography>
+                    )}
+                </div>
             </Fade>
         );
     } else {
