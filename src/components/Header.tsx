@@ -3,6 +3,7 @@ import '../styles/Header.css';
 import {
     AppBar,
     Box,
+    Button,
     IconButton,
     InputBase,
     Link,
@@ -139,6 +140,15 @@ export default function Header(): JSX.Element {
                             <SearchIcon />
                         </IconButton>
                     </Paper>
+                    <Button
+                        sx={{
+                            ml: 1,
+                            p: '10px',
+                            color: 'var(--secondary-text-color)',
+                        }}
+                    >
+                        Login
+                    </Button>
                 </Toolbar>
             </AppBar>
         </Box>
